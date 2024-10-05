@@ -1,0 +1,67 @@
+name: Create Repo for RustDesk latest and nightly
+
+on:
+  #schedule:
+    # Every Saturday at 3AM UTC
+    #- cron: "0 3 * * 6"
+  workflow_dispatch:
+
+
+permissions:
+    contents: read
+    pages: write
+    id-token: write
+  
+jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Setup Pages
+          uses: actions/configure-pages@v4
+
+        - name: Install requirements
+          run: |
+            sudo apt update && sudo apt install rpm createrepo-c -y
+    
+        - name: Import GPG Key
+          run: |
+            echo "$GPG_PRIVATE_KEY" | gpg --batch --yes --import
+            echo "%_signature gpg
+            %_gpg_name 1521F21900DB320195AFA3582BE833611FF60389" > ~/.rpmmacros
+          env:
+            GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+
+        - name: Download RustDesk latest
+          run: |
+            bash rustdesk_latest.sh
+
+        - name: Download RustDesk nightly
+          run: |
+            bash rustdesk_nightly.sh
+
+        - name: Create repo latest
+          run: |
+            bash createrepo-latest.sh
+
+        - name: Create repo nightly
+          run: |
+            bash createrepo-nightly.sh
+
+        - name: Upload Pages artifact
+          uses: actions/upload-pages-artifact@v3
+          with:
+            name: github-pages
+            path: wwwroot
+    deploy:
+      environment:
+        name: github-pages
+        url: ${{ steps.deployment.outputs.page_url }}
+      runs-on: ubuntu-latest
+      needs: build
+      steps:
+        - name: Deploy to GitHub Pages
+          id: deployment
+          uses: actions/deploy-pages@v4
