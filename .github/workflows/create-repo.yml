@@ -1,9 +1,9 @@
 name: Create Repo for RustDesk latest and nightly
 
 on:
-  #schedule:
-    # Every Saturday at 3AM UTC
-    #- cron: "0 3 * * 6"
+  schedule:
+    # Every 3AM UTC
+    - cron: "0 3 * * *"
   workflow_dispatch:
 
 
