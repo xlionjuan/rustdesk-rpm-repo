@@ -3,7 +3,7 @@
 > [!IMPORTANT]  
 > This is ***unofficial*** [RustDesk](https://github.com/rustdesk/rustdesk/) RPM repo, what I can say is *trust me bro*, it is your decision to trust me or not.
 
-> [!IMPORTANT]  
+> [!NOTE]  
 > Same thing but [APT](https://github.com/xlionjuan/rustdesk-apt-repo-latest) is also available.
 
 The `rustdesk*.sh` script is written by ChatGPT, it will fetch the release data from GitHub API and use [jq](https://github.com/jqlang/jq) to parse JSON data and find the asset URL.
