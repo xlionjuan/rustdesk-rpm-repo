@@ -3,8 +3,8 @@
 
 [xlion-rustdesk-rpm-repo]
 name=XLion RustDesk RPM repo
-baseurl=https://xlionjuan.github.io/rpm-repo-test/latest
+baseurl=https://xlionjuan.github.io/rustdesk-rpm-repo/latest
 enabled=1
 gpgcheck=1
-gpgkey=https://xlionjuan.github.io/rpm-repo-test/pubkey.gpg
+gpgkey=https://xlionjuan.github.io/rustdesk-rpm-repo/pubkey.gpg
 
