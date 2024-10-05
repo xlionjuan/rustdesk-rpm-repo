@@ -1,1 +1,0 @@
-# rpm-repo-test

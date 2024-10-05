@@ -4,13 +4,13 @@
 ### latest
 
 ```bash
-curl -fsSl https://xlionjuan.github.io/rpm-repo-test/latest.repo | sudo tee /etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo
+curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/latest.repo | sudo tee /etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo
 ```
 
 ### nightly
 
 ```bash
-curl -fsSl https://xlionjuan.github.io/rpm-repo-test/nightly.repo | sudo tee /etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo
+curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/nightly.repo | sudo tee /etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo
 ```
 
 If you wanna switch channel, edit `/etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo`, edit the `baseurl`.
