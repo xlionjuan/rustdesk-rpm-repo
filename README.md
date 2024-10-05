@@ -9,7 +9,7 @@
 The `rustdesk*.sh` script is written by ChatGPT, it will fetch the release data from GitHub API and use [jq](https://github.com/jqlang/jq) to parse JSON data and find the asset URL.
 
 ## Architectures
-This repo privides two architectures
+This repo provides two architectures
 
 * `amd64`  (x86_64)
 * `arm64`  (aarch64)
