@@ -19,6 +19,9 @@ This repo provides two architectures
 This is all in one repo, so it will update all every 3 AM UTC, because RustDesk's Nightly will build a little over 2 hours.
 
 ## Import RPM repo
+
+> [!NOTE]  
+> You could use this command for your `rpm-ostree` ([Fedora Atomic](https://fedoraproject.org/atomic-desktops/)) based systems. Or use this commend to add repo to your custom system images like [ublue-os/image-template](https://github.com/ublue-os/image-template).
 ### latest
 
 ```bash
@@ -47,6 +50,8 @@ Please ignore the name, I shared the same key with APT repo.
 ```bash
 sudo dnf install rustdesk
 ```
+Or `rpm-ostree install rustdesk` if you're using [Fedora Atomic](https://fedoraproject.org/atomic-desktops/) based systems.
+
 ## Update to same version number of nightly
 
 Because RustDesk didn't change its version number or add special identify when releasing nightly, so you could run
