@@ -21,7 +21,7 @@ This is all in one repo, so it will update all every 3 AM UTC, because RustDesk'
 ## Import RPM repo
 
 > [!NOTE]  
-> You could use this command for your `rpm-ostree` ([Fedora Atomic](https://fedoraproject.org/atomic-desktops/)) based systems. Or use this commend to add repo to your custom system images like [ublue-os/image-template](https://github.com/ublue-os/image-template).
+> You could use this command for your `rpm-ostree` ([Fedora Atomic](https://fedoraproject.org/atomic-desktops/)) based systems. Or use this commend to add repo to your custom system images like [ublue-os/image-template](https://github.com/ublue-os/image-template). Please remember to remove `sudo` if you are using [ublue-os/image-template](https://github.com/ublue-os/image-template).
 ### latest
 
 ```bash
