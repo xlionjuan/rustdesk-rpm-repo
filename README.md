@@ -1,5 +1,7 @@
 # rustdesk-rpm-repo
 
+[![Create Repo for RustDesk latest and nightly](https://github.com/xlionjuan/rustdesk-rpm-repo/actions/workflows/create-repo.yml/badge.svg)](https://github.com/xlionjuan/rustdesk-rpm-repo/actions/workflows/create-repo.yml)
+
 > [!IMPORTANT]  
 > This is ***unofficial*** [RustDesk](https://github.com/rustdesk/rustdesk/) RPM repo, what I can say is *trust me bro*, it is your decision to trust me or not.
 
