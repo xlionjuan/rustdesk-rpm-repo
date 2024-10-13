@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -oue pipefail
+
 # Define the repository and the tag you want to fetch
 REPO="rustdesk/rustdesk"
 #TAG="latest"  # Change this to any tag you want
@@ -17,19 +19,17 @@ fi
 # Use jq to parse JSON data and find the asset URL
 RUSTDESK_URL_AMD64=$(echo "$RELEASE_DATA" | jq -r '.assets[] | select(.name | contains("x86_64") and endswith(".rpm") and (contains("suse") | not)) | .browser_download_url' | head -n 1)
 RUSTDESK_URL_ARM64=$(echo "$RELEASE_DATA" | jq -r '.assets[] | select(.name | contains("aarch64") and endswith(".rpm") and (contains("suse") | not)) | .browser_download_url' | head -n 1)
-
-
-# Check if the asset URL was found
-#if [ -z "$RUSTDESK_URL" ]; then
-#    echo "No matching file found."
-#else
-#    echo "RUSTDESK_URL=\"$RUSTDESK_URL\""
-#fi
+RUSTDESK_URL_AMD64_SUSE=$(echo "$RELEASE_DATA" | jq -r '.assets[] | select(.name | contains("x86_64") and endswith(".rpm") and contains("suse")) | .browser_download_url' | head -n 1)
+RUSTDESK_URL_ARM64_SUSE=$(echo "$RELEASE_DATA" | jq -r '.assets[] | select(.name | contains("aarch64") and endswith(".rpm") and contains("suse")) | .browser_download_url' | head -n 1)
 
 echo "--------------------RESULT--------------------"
 echo "RUSTDESK_URL_AMD64=\"$RUSTDESK_URL_AMD64\""
 echo "RUSTDESK_URL_ARM64=\"$RUSTDESK_URL_ARM64\""
+echo "RUSTDESK_URL_AMD64=\"$RUSTDESK_URL_AMD64_SUSE\""
+echo "RUSTDESK_URL_ARM64=\"$RUSTDESK_URL_ARM64_SUSE\""
 echo ""
 echo "------------------DOWNLOADING-----------------"
 wget -P wwwroot/latest $RUSTDESK_URL_AMD64
 wget -P wwwroot/latest $RUSTDESK_URL_ARM64
+wget -P wwwroot/latest-suse $RUSTDESK_URL_AMD64_SUSE
+wget -P wwwroot/latest-suse $RUSTDESK_URL_ARM64_SUSE
