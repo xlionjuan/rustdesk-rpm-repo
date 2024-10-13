@@ -15,6 +15,7 @@ permissions:
 jobs:
     build:
       runs-on: ubuntu-latest
+      container: fedora:latest
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
@@ -24,7 +25,7 @@ jobs:
 
         - name: Install requirements
           run: |
-            sudo apt update && sudo apt install rpm createrepo-c -y
+            sudo dnf -y install createrepo_c jq wget rpm-sign
     
         - name: Import GPG Key
           run: |
