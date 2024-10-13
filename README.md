@@ -73,9 +73,6 @@ to upgrade manually, still better than download manually.
 
 # rustdesk-rpm-suse-repo
 
-> [!NOTE]  
-> Testing
-
 ## Architectures
 This repo provides two architectures
 
