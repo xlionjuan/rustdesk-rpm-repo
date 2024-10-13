@@ -31,5 +31,5 @@ echo ""
 echo "------------------DOWNLOADING-----------------"
 wget -P wwwroot/nightly $RUSTDESK_URL_AMD64
 wget -P wwwroot/nightly $RUSTDESK_URL_ARM64
-wget -P wwwroot/latest-suse $RUSTDESK_URL_AMD64_SUSE
-wget -P wwwroot/latest-suse $RUSTDESK_URL_ARM64_SUSE
+wget -P wwwroot/nightly-suse $RUSTDESK_URL_AMD64_SUSE
+wget -P wwwroot/nightly-suse $RUSTDESK_URL_ARM64_SUSE
