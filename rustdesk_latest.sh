@@ -25,8 +25,8 @@ RUSTDESK_URL_ARM64_SUSE=$(echo "$RELEASE_DATA" | jq -r '.assets[] | select(.name
 echo "--------------------RESULT--------------------"
 echo "RUSTDESK_URL_AMD64=\"$RUSTDESK_URL_AMD64\""
 echo "RUSTDESK_URL_ARM64=\"$RUSTDESK_URL_ARM64\""
-echo "RUSTDESK_URL_AMD64=\"$RUSTDESK_URL_AMD64_SUSE\""
-echo "RUSTDESK_URL_ARM64=\"$RUSTDESK_URL_ARM64_SUSE\""
+echo "RUSTDESK_URL_AMD64_SUSE=\"$RUSTDESK_URL_AMD64_SUSE\""
+echo "RUSTDESK_URL_ARM64_SUSE=\"$RUSTDESK_URL_ARM64_SUSE\""
 echo ""
 echo "------------------DOWNLOADING-----------------"
 wget -P wwwroot/latest $RUSTDESK_URL_AMD64
