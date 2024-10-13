@@ -29,8 +29,10 @@ jobs:
         - name: Import GPG Key
           run: |
             echo "$GPG_PRIVATE_KEY" | gpg --batch --yes --import
+            GPG_PUBLIC_KEY=$(gpg --list-keys --with-colons | grep fpr | head -n1 | cut -d: -f10)
+
             echo "%_signature gpg
-            %_gpg_name 1521F21900DB320195AFA3582BE833611FF60389" > ~/.rpmmacros
+            %_gpg_name $GPG_PUBLIC_KEY" > ~/.rpmmacros
           env:
             GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
