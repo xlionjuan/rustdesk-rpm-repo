@@ -15,17 +15,13 @@ permissions:
 jobs:
     build:
       runs-on: ubuntu-latest
-      container: fedora:latest
+      container: ghcr.io/xlionjuan/fedora-createrepo-image:latest
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
 
         - name: Setup Pages
           uses: actions/configure-pages@v5
-
-        - name: Install requirements
-          run: |
-            sudo dnf -y install createrepo_c jq wget rpm-sign
     
         - name: Import GPG Key
           run: |
@@ -37,21 +33,11 @@ jobs:
           env:
             GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
-        - name: Download RustDesk latest
-          run: |
-            bash rustdesk_latest.sh
+        - name: Download RustDesk latest and nightly
+          run: bash rustdesk_latest.sh & bash rustdesk_nightly.sh
 
-        - name: Download RustDesk nightly
-          run: |
-            bash rustdesk_nightly.sh
-
-        - name: Create repo latest
-          run: |
-            bash createrepo-latest.sh
-
-        - name: Create repo nightly
-          run: |
-            bash createrepo-nightly.sh
+        - name: Create repo latest and nightly
+          run: bash createrepo-latest.sh & bash createrepo-nightly.sh
 
         - name: Upload Pages artifact
           uses: actions/upload-pages-artifact@v3

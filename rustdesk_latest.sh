@@ -29,6 +29,5 @@ echo "RUSTDESK_URL_AMD64_SUSE=\"$RUSTDESK_URL_AMD64_SUSE\""
 echo "RUSTDESK_URL_ARM64_SUSE=\"$RUSTDESK_URL_ARM64_SUSE\""
 echo ""
 echo "------------------DOWNLOADING-----------------"
-wget -P wwwroot/latest $RUSTDESK_URL_AMD64 $RUSTDESK_URL_ARM64
-wget -P wwwroot/latest-suse $RUSTDESK_URL_AMD64_SUSE $RUSTDESK_URL_ARM64_SUSE
+wget -P wwwroot/latest $RUSTDESK_URL_AMD64 $RUSTDESK_URL_ARM64 & wget -P wwwroot/latest-suse $RUSTDESK_URL_AMD64_SUSE $RUSTDESK_URL_ARM64_SUSE
 
