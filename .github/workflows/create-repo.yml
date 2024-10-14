@@ -15,17 +15,13 @@ permissions:
 jobs:
     build:
       runs-on: ubuntu-latest
-      container: fedora:latest
+      container: ghcr.io/xlionjuan/fedora-createrepo-image:latest
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
 
         - name: Setup Pages
           uses: actions/configure-pages@v5
-
-        - name: Install requirements
-          run: |
-            sudo dnf -y install createrepo_c jq wget rpm-sign
     
         - name: Import GPG Key
           run: |
