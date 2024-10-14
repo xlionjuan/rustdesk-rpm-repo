@@ -4,8 +4,12 @@ on:
   schedule:
     # Every 3AM UTC
     - cron: "0 3 * * *"
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
   workflow_dispatch:
-
 
 permissions:
     contents: read
@@ -24,6 +28,7 @@ jobs:
           uses: actions/configure-pages@v5
     
         - name: Import GPG Key
+          if: github.event_name != 'pull_request' || github.actor == 'renovate[bot]'
           run: |
             echo "$GPG_PRIVATE_KEY" | gpg --batch --yes --import
             GPG_PUBLIC_KEY=$(gpg --list-keys --with-colons | grep fpr | head -n1 | cut -d: -f10)
@@ -36,15 +41,25 @@ jobs:
         - name: Download RustDesk latest and nightly
           run: bash rustdesk_latest.sh & bash rustdesk_nightly.sh
 
-        - name: Create repo latest and nightly
-          run: bash createrepo-latest.sh & bash createrepo-nightly.sh
+        - name: Sign RPMs
+          if: github.event_name != 'pull_request' || github.actor == 'renovate[bot]'
+          run: bash createrepo/1_sign_rpm.sh
+
+        - name: Create repo
+          run: bash createrepo/2_createrepo.sh
+
+        - name: Sign repo
+          if: github.event_name != 'pull_request' || github.actor == 'renovate[bot]'
+          run: bash createrepo/3_sign_repo.sh
 
         - name: Upload Pages artifact
           uses: actions/upload-pages-artifact@v3
           with:
             name: github-pages
             path: wwwroot
+
     deploy:
+      if: github.event_name != 'pull_request'
       environment:
         name: github-pages
         url: ${{ steps.deployment.outputs.page_url }}
