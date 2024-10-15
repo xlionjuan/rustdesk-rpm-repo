@@ -18,6 +18,7 @@ permissions:
   
 jobs:
     build:
+      name: Build
       runs-on: ubuntu-latest
       container: ghcr.io/xlionjuan/fedora-createrepo-image:latest
       steps:
@@ -58,7 +59,15 @@ jobs:
             name: github-pages
             path: wwwroot
 
+        - name: Publish Artifacts
+          uses: actions/upload-artifact@v4
+          with:
+            name: cf_r2
+            path: wwwroot
+            if-no-files-found: error
+
     deploy:
+      name: Deploy to GitHub Pages
       if: github.event_name != 'pull_request'
       environment:
         name: github-pages
@@ -69,3 +78,27 @@ jobs:
         - name: Deploy to GitHub Pages
           id: deployment
           uses: actions/deploy-pages@v4
+
+    push-to-cf-r2:
+      name: Push to Cloudflare R2
+      if: github.event_name != 'pull_request'
+      runs-on: ubuntu-latest
+      needs: build
+      steps:
+        - name: Download artifact
+          uses: actions/download-artifact@v4
+          with:
+            pattern: cf_r2
+            path: wwwroot
+            merge-multiple: true
+    
+        - name: Upload to Cloudflare R2
+          uses: ryand56/r2-upload-action@latest
+          with:
+            r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
+            r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+            r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+            r2-bucket: ${{ secrets.R2_BUCKET }}
+            keep-file-fresh: true
+            source-dir: wwwroot
+            destination-dir: ./
