@@ -10,6 +10,8 @@
 > [!NOTE]  
 > Same thing but [APT](https://github.com/xlionjuan/rustdesk-apt-repo-latest) is also available.
 
+This repo will use  [xlionjuan/fedora-createrepo-image](https://github.com/xlionjuan/fedora-createrepo-image) and some [simple scripts](https://github.com/xlionjuan/rustdesk-rpm-repo/tree/main/createrepo) to create repo, and deploy to GitHub Pages and Cloudflare R2.
+
 The `rustdesk*.sh` script is written by ChatGPT, it will fetch the release data from GitHub API and use [jq](https://github.com/jqlang/jq) to parse JSON data and find the asset URL.
 
 ## Architectures
