@@ -26,10 +26,10 @@ jobs:
 
         - name: Verify
           run: |
-            cosign verify --rekor-url=https://rekor.sigstore.dev \ 
+            cosign verify --rekor-url=https://rekor.sigstore.dev \
             --certificate-identity-regexp "https://github.com/xlionjuan/.*" \
             --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-            ghcr.io/xlionjuan/fedora-createrepo-image-minimal:latest   
+            ghcr.io/xlionjuan/fedora-createrepo-image-minimal:latest  
    
     build:
       name: Build
