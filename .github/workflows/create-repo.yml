@@ -67,6 +67,9 @@ jobs:
         - name: Sign repo
           if: github.event_name != 'pull_request' || github.actor == 'renovate[bot]'
           run: bash createrepo/3_sign_repo.sh
+        
+        - name: Sleep 5 sec
+          run: sleep 5
 
         - name: Upload Pages artifact
           uses: actions/upload-pages-artifact@v3
