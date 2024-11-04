@@ -1,0 +1,11 @@
+# Two channels available: latest, nightly.
+# Switch by edit the string within baseurl.
+
+[xlion-rustdesk-rpm-suse-repo]
+name=XLion RustDesk RPM SUSE repo
+baseurl=https://rustdesk-rpm-repo.xlion.dev/nightly-suse
+enabled=1
+autorefresh=1
+gpgcheck=1
+gpgkey=https://rustdesk-rpm-repo.xlion.dev/pubkey.gpg
+

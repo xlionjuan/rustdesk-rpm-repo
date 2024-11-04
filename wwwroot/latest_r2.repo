@@ -1,0 +1,10 @@
+# Two channels available: latest, nightly.
+# Switch by edit the string within baseurl.
+
+[xlion-rustdesk-rpm-repo]
+name=XLion RustDesk RPM repo
+baseurl=https://rustdesk-rpm-repo.xlion.dev/latest
+enabled=1
+gpgcheck=1
+gpgkey=https://rustdesk-rpm-repo.xlion.dev/pubkey.gpg
+
