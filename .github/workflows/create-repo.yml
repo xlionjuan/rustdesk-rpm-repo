@@ -71,6 +71,9 @@ jobs:
         - name: Sleep 5 sec
           run: sleep 5
 
+        - name: Clean up GPG Key
+          run: rm -rf ~/.gnupg && gpg --list-keys
+
         - name: Upload Pages artifact
           uses: actions/upload-pages-artifact@v3
           with:
