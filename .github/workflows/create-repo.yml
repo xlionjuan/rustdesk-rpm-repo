@@ -59,7 +59,9 @@ jobs:
             set -oue pipefail
             ./rustdesk_selinux/rustdesk.sh
             cp rustdesk_selinux/noarch/rustdesk_selinux*.rpm wwwroot/latest &\
-            cp rustdesk_selinux/noarch/rustdesk_selinux*.rpm wwwroot/nightly
+            cp rustdesk_selinux/noarch/rustdesk_selinux*.rpm wwwroot/nightly &\
+            cp rustdesk_selinux/noarch/rustdesk_selinux*.rpm wwwroot/latest-suse &\
+            cp rustdesk_selinux/noarch/rustdesk_selinux*.rpm wwwroot/nightly-suse
 
         - name: Download RustDesk latest and nightly
           run: bash rustdesk_latest.sh & bash rustdesk_nightly.sh
