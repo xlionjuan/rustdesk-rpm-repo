@@ -1,0 +1,25 @@
+policy_module(rustdesk, 1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+type rustdesk_t;
+type rustdesk_exec_t;
+init_daemon_domain(rustdesk_t, rustdesk_exec_t)
+
+permissive rustdesk_t;
+
+########################################
+#
+# rustdesk local policy
+#
+allow rustdesk_t self:fifo_file rw_fifo_file_perms;
+allow rustdesk_t self:unix_stream_socket create_stream_socket_perms;
+
+domain_use_interactive_fds(rustdesk_t)
+
+files_read_etc_files(rustdesk_t)
+
+miscfiles_read_localization(rustdesk_t)

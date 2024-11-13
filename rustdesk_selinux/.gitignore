@@ -1,0 +1,11 @@
+.build
+
+noarch
+
+tmp
+
+*.rpm
+
+rustdesk_selinux.8
+
+*.pp.bz2

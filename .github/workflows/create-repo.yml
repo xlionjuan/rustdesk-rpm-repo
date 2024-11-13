@@ -54,6 +54,13 @@ jobs:
           env:
             GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
+        - name: Build SELinux config for RustDesk
+          run: |
+            set -oue pipefail
+            ./rustdesk_selinux/rustdesk.sh
+            cp rustdesk_selinux/noarch/rustdesk_selinux*.rpm wwwroot/latest &\
+            cp rustdesk_selinux/noarch/rustdesk_selinux*.rpm wwwroot/nightly
+
         - name: Download RustDesk latest and nightly
           run: bash rustdesk_latest.sh & bash rustdesk_nightly.sh
 
