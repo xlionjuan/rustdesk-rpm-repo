@@ -1,17 +1,19 @@
-#!/bin/sh -e
+#!/bin/bash
 
-DIRNAME=`dirname $0`
-cd $DIRNAME
+set -oue pipefail
+
+DIRNAME=$(dirname "$0")
+cd "$DIRNAME"
 USAGE="$0 [ --update ]"
-if [ `id -u` != 0 ]; then
+if [ $(id -u) != 0 ]; then
 echo 'You must be root to run this script'
 exit 1
 fi
 
 if [ $# -eq 1 ]; then
 	if [ "$1" = "--update" ] ; then
-		time=`ls -l --time-style="+%x %X" rustdesk.te | awk '{ printf "%s %s", $6, $7 }'`
-		rules=`ausearch --start $time -m avc --raw -se rustdesk`
+		time=$(ls -l --time-style="+%x %X" rustdesk.te | awk '{ printf "%s %s", $6, $7 }')
+		rules=$(ausearch --start "$time" -m avc --raw -se rustdesk)
 		if [ x"$rules" != "x" ] ; then
 			echo "Found avc's to update policy with"
 			echo -e "$rules" | audit2allow -R
@@ -29,7 +31,7 @@ if [ $# -eq 1 ]; then
 			exit 0
 		fi
 	else
-		echo -e $USAGE
+		echo -e "$USAGE"
 		exit 1
 	fi
 elif [ $# -ge 2 ] ; then
