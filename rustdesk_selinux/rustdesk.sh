@@ -35,7 +35,7 @@ if [ $# -eq 1 ]; then
 		exit 1
 	fi
 elif [ $# -ge 2 ] ; then
-	echo -e $USAGE
+	echo -e "$USAGE"
 	exit 1
 fi
 
