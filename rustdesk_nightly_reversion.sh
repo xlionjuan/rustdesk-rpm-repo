@@ -24,7 +24,7 @@ for rpm_file in "$SOURCE_DIR"/*.rpm; do
             -p "$TARGET_DIR/$(basename "$rpm_file")" \
             "$rpm_file"
 
-        echo "Processed and moved to: "$TARGET_DIR"/$(basename "$rpm_file")"
+        echo "Processed and moved to: $TARGET_DIR/$(basename "$rpm_file")"
     else
         echo "Skipping: $rpm_file"
     fi
