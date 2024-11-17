@@ -61,19 +61,6 @@ sudo dnf install rustdesk
 ```
 Or `rpm-ostree install rustdesk` if you're using [Fedora Atomic](https://fedoraproject.org/atomic-desktops/) based systems.
 
-## Update to same version number of nightly
-
-Because RustDesk didn't change its version number or add special identify when releasing nightly, so you could run
-
-```bash
-sudo dnf reinstall rustdesk
-```
-
-to upgrade manually, still better than download manually.
-
-> [!CAUTION]
-> Don't asking me to doing this.
-
 # rustdesk-rpm-suse-repo
 
 ## Architectures
@@ -100,12 +87,4 @@ curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/nightly-suse.repo | sud
 
 ```bash
 sudo zypper in rustdesk
-```
-
-## Update to same version number of nightly
-
-Because RustDesk didn't change its version number or add special identify when releasing nightly, so you could run
-
-```bash
-sudo zypper in --force rustdesk
 ```
