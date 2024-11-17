@@ -64,7 +64,15 @@ jobs:
             cp rustdesk_selinux/noarch/rustdesk_selinux*.rpm "wwwroot/nightly-suse"
 
         - name: Download RustDesk latest and nightly
-          run: bash rustdesk_latest.sh & bash rustdesk_nightly.sh
+          run: bash rustdesk_latest.sh & bash rustdesk_nightly.sh && sleep 1
+
+        - name: Reversion nightly version number with date
+          run: |
+            bash rustdesk_nightly_reversion.sh wwwroot/nightly/ori &\
+            bash rustdesk_nightly_reversion.sh wwwroot/nightly-suse/ori
+            sleep 0.5
+            echo "Run tree"
+            tree
 
         - name: Sign RPMs
           if: github.event_name != 'pull_request' || github.actor == 'renovate[bot]' || github.ref == 'refs/heads/main'
