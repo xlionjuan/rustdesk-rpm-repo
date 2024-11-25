@@ -69,7 +69,7 @@ jobs:
             cp rustdesk_selinux/noarch/rustdesk_selinux*.rpm "wwwroot/nightly-suse"
 
         - name: Download RustDesk latest and nightly
-          run: bash rustdesk_latest.sh && bash rustdesk_nightly.sh && sleep 1
+          run: bash rustdesk_latest.sh & bash rustdesk_nightly.sh && sleep 1
 
         - name: Reversion nightly version number with date
           run: |
