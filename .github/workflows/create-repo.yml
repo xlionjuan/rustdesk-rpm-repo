@@ -69,13 +69,12 @@ jobs:
             cp rustdesk_selinux/noarch/rustdesk_selinux*.rpm "wwwroot/nightly-suse"
 
         - name: Download RustDesk latest and nightly
-          run: bash rustdesk_latest.sh & bash rustdesk_nightly.sh && sleep 1
+          run: bash rustdesk_latest.sh & bash rustdesk_nightly.sh
 
         - name: Reversion nightly version number with date
           run: |
             bash rustdesk_nightly_reversion.sh wwwroot/nightly/ori &\
             bash rustdesk_nightly_reversion.sh wwwroot/nightly-suse/ori
-            sleep 0.5
             echo "Run tree"
             tree
 
@@ -90,8 +89,8 @@ jobs:
           if: github.event_name != 'pull_request' || github.actor == 'renovate[bot]' || github.ref == 'refs/heads/main'
           run: bash createrepo/3_sign_repo.sh
         
-        - name: Sleep 5 sec
-          run: sleep 5
+        - name: Sleep 0.5 sec
+          run: sleep 0.5
 
         - name: Clean up GPG Key
           run: rm -rf ~/.gnupg
