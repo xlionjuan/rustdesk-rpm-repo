@@ -61,6 +61,10 @@ sudo dnf install rustdesk
 ```
 Or `rpm-ostree install rustdesk` if you're using [Fedora Atomic](https://fedoraproject.org/atomic-desktops/) based systems.
 
+### Versioning
+
+I use [fpm](https://github.com/jordansissel/fpm) to modify the version with current date, so you'll never need to run `reinstall` in order to upgrade.
+
 # rustdesk-rpm-suse-repo
 
 ## Architectures
@@ -88,3 +92,7 @@ curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/nightly-suse.repo | sud
 ```bash
 sudo zypper in rustdesk
 ```
+
+### Versioning
+
+I use [fpm](https://github.com/jordansissel/fpm) to modify the version with current date, so you'll never need to run `in -f` in order to upgrade.
