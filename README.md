@@ -44,6 +44,26 @@ curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/nightly.repo | sudo tee
 
 If you wanna switch channel, edit `/etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo`, edit the `baseurl`.
 
+<details>
+<summary>If you wants Cloudflare...</summary>
+<br>
+GitHub is using Fastly CDN, which performs terrible on lots of countries, I also pushed the repo to Cloudflare R2, which has better speed.
+
+But due to bot fight mode is enabled, some VPS providers such as AWS, Azure (GitHub Actions) will be blocked, please use GitHub Pages instead.
+
+### latest
+
+```bash
+curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/latest_r2.repo | sudo tee /etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo
+```
+
+### nightly
+
+```bash
+curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/nightly_r2.repo | sudo tee /etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo
+```
+</details>
+
 ## Import/Verify GPG Key
 
 The fingerprint is:
@@ -86,6 +106,26 @@ curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/latest-suse.repo | sudo
 ```bash
 curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/nightly-suse.repo | sudo tee /etc/zypp/repos.d/xlion-rustdesk-rpm-suse-repo.repo
 ```
+
+<details>
+<summary>If you wants Cloudflare...</summary>
+<br>
+GitHub is using Fastly CDN, which performs terrible on lots of countries, I also pushed the repo to Cloudflare R2, which has better speed.
+
+But due to bot fight mode is enabled, some VPS providers such as AWS, Azure (GitHub Actions) will be blocked, please use GitHub Pages instead.
+
+### latest
+
+```bash
+curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/latest-suse.repo | sudo tee /etc/zypp/repos.d/xlion-rustdesk-rpm-suse-repo.repo
+```
+
+### nightly
+
+```bash
+curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/nightly-suse.repo | sudo tee /etc/zypp/repos.d/xlion-rustdesk-rpm-suse-repo.repo
+```
+</details>
 
 ## Install/Upgrade RustDesk
 
