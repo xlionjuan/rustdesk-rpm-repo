@@ -117,13 +117,13 @@ But due to bot fight mode is enabled, some VPS providers such as AWS, Azure (Git
 ### latest
 
 ```bash
-curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/latest-suse.repo | sudo tee /etc/zypp/repos.d/xlion-rustdesk-rpm-suse-repo.repo
+curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/latest-suse_r2.repo | sudo tee /etc/zypp/repos.d/xlion-rustdesk-rpm-suse-repo.repo
 ```
 
 ### nightly
 
 ```bash
-curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/nightly-suse.repo | sudo tee /etc/zypp/repos.d/xlion-rustdesk-rpm-suse-repo.repo
+curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/nightly-suse_r2.repo | sudo tee /etc/zypp/repos.d/xlion-rustdesk-rpm-suse-repo.repo
 ```
 </details>
 
