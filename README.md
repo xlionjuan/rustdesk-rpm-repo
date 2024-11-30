@@ -95,4 +95,4 @@ sudo zypper in rustdesk
 
 ### Versioning
 
-I use [fpm](https://github.com/jordansissel/fpm) to modify the version with current date, so you'll never need to run `in -f` in order to upgrade.
+I use [fpm](https://github.com/jordansissel/fpm) to modify the nightly version with current date, so you'll never need to run `reinstall` in order to upgrade nightly.
