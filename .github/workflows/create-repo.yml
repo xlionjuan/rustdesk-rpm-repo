@@ -60,6 +60,7 @@ jobs:
             GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
         - name: Build SELinux config for RustDesk
+          if: false
           run: |
             set -oue pipefail
             ./rustdesk_selinux/rustdesk.sh
