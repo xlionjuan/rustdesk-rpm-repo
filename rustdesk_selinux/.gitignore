@@ -8,4 +8,5 @@ tmp
 
 rustdesk_selinux.8
 
+*.pp
 *.pp.bz2
