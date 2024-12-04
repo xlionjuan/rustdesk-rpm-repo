@@ -7,7 +7,7 @@ restorecon -R /usr/lib/rustdesk/rustdesk; \
 %define selinux_policyver 40.29-2
 
 Name:   rustdesk_selinux
-Version:	1.0
+Version:	1.1
 Release:	1%{?dist}
 Summary:	SELinux policy module for RustDesk: https://rustdesk.com/docs/en/client/linux/selinux/
 
