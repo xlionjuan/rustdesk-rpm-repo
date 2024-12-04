@@ -15,3 +15,7 @@ You could just install `rustdesk_selinux` if you haven't installed RustDesk, bec
 
 1. Remove `rustdesk_selinux`
 2. Run `sudo semodule -r rustdesk` to ensure it completely removed
+
+
+> [!IMPORTANT]  
+> Disabled
