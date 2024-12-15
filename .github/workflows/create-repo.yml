@@ -40,7 +40,7 @@ jobs:
       name: Build
       needs: verify
       runs-on: ubuntu-latest
-      container: ghcr.io/xlionjuan/fedora-createrepo-image-minimal:latest
+      container: ghcr.io/xlionjuan/fedora-createrepo-image:latest
       steps:
         - name: Checkout code
           uses: actions/checkout@v4
