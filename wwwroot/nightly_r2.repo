@@ -5,6 +5,8 @@
 name=XLion RustDesk RPM repo
 baseurl=https://rustdesk-rpm-repo.xlion.dev/nightly
 enabled=1
+skip_if_unavailable=True
 gpgcheck=1
+repo_gpgcheck=1
 gpgkey=https://rustdesk-rpm-repo.xlion.dev/pubkey.gpg
 

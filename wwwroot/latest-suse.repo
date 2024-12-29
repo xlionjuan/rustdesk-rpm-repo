@@ -6,6 +6,8 @@ name=XLion RustDesk RPM SUSE repo
 baseurl=https://xlionjuan.github.io/rustdesk-rpm-repo/latest-suse
 enabled=1
 autorefresh=1
+skip_if_unavailable=True
 gpgcheck=1
+repo_gpgcheck=1
 gpgkey=https://xlionjuan.github.io/rustdesk-rpm-repo/pubkey.gpg
 
