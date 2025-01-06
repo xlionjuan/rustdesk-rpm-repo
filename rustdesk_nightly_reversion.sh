@@ -19,7 +19,7 @@ for rpm_file in "$SOURCE_DIR"/*.rpm; do
             NEW_VERSION="${ORIGINAL_VERSION}+$DATE"
             # Rebuild the RPM using fpm
             fpm -t rpm -s rpm \
-                --version "$NEW_VERSION" \
+                --version "$NEW_VERSION" --rpm-compression xz\
                 -p "$TARGET_DIR/$(basename "$rpm_file")" \
                 "$rpm_file"
             echo "Processed and moved to: $TARGET_DIR/$(basename "$rpm_file")"
