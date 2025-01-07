@@ -136,3 +136,7 @@ sudo zypper in rustdesk
 ### Versioning
 
 I use [fpm](https://github.com/jordansissel/fpm) to modify the nightly version with current date, so you'll never need to run `reinstall` in order to upgrade nightly.
+
+## License
+
+This repository is intended for distributing software. Unless otherwise specified, all scripts and configurations are licensed under the [GNU AGPLv3](LICENSE).**THIS DOES NOT INCLUDE THE DISTRIBUTED SOFTWARE ITSELF**. For the licenses of the distributed software, please refer to the software developers' websites, Git repositories, the packages' metadata, or contact the developers directly if you have any questions.
