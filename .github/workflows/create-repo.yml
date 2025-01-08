@@ -64,8 +64,10 @@ jobs:
 
         - name: Reversion nightly version number with date
           run: |
-            bash rustdesk_nightly_reversion.sh wwwroot/nightly/ori &\
-            bash rustdesk_nightly_reversion.sh wwwroot/nightly-suse/ori
+            bash rustdesk_nightly_reversion.sh wwwroot/nightly/ori IS_NIGHTLY &\
+            bash rustdesk_nightly_reversion.sh wwwroot/nightly-suse/ori IS_NIGHTLY &\
+            bash rustdesk_nightly_reversion.sh wwwroot/latest/ori "" &\
+            bash rustdesk_nightly_reversion.sh wwwroot/latest-suse/ori ""
             echo "Run tree"
             tree
 
