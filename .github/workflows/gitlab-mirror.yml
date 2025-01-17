@@ -1,6 +1,6 @@
 name: Gitlab Mirror
 
-on: [push, pull_request, create, delete]
+on: [push, create, delete]
 
 jobs:
   sync:
