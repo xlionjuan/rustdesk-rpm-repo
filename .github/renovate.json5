@@ -8,6 +8,11 @@
       "matchManagers": ["github-actions"],
       "matchUpdateTypes": ["major", "minor", "patch"],
       "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["pin", "digest", "pinDigest"],
+      "matchPackageNames": ["ghcr.io/xlionjuan/fedora-createrepo-image"],
+      "enabled": false
     }
   ]
 }
