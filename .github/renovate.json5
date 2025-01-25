@@ -6,7 +6,7 @@
   "packageRules": [
     {
       "matchManagers": ["github-actions"],
-      "matchUpdateTypes": ["major", "minor", "patch"],
+      "matchUpdateTypes": ["pin", "digest", "pinDigest"],
       "automerge": true
     },
     {
