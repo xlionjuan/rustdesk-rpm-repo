@@ -1,12 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:best-practices"],
-  "rebaseWhen": "never",
   "enabledManagers": ["github-actions"],
   "packageRules": [
     {
       "matchManagers": ["github-actions"],
-      "matchUpdateTypes": ["pin", "digest", "pinDigest"],
+      "matchUpdateTypes": ["pin", "digest", "pinDigest","major", "minor", "patch"],
       "automerge": true,
       "labels": ["dependencies"]
     },
