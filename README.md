@@ -1,5 +1,5 @@
 # rustdesk-rpm-repo
-
+DUMMY
 [![Create Repo for RustDesk latest and nightly](https://github.com/xlionjuan/rustdesk-rpm-repo/actions/workflows/create-repo.yml/badge.svg)](https://github.com/xlionjuan/rustdesk-rpm-repo/actions/workflows/create-repo.yml)
 
 [Click me if you're using SUSE](#rustdesk-rpm-suse-repo)
