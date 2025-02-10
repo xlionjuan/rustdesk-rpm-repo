@@ -18,3 +18,4 @@ pages:
   rules:
     - if: '$CI_COMMIT_REF_NAME == "main" && $CI_PIPELINE_SOURCE == "push"'
     - if: $CI_PIPELINE_SOURCE == "schedule"
+# Dummy
