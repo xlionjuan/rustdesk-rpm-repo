@@ -45,6 +45,17 @@ curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/nightly.repo | sudo tee
 If you wanna switch channel, edit `/etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo`, edit the `baseurl`.
 
 <details>
+<summary>GitLab Pages...</summary>
+<br>
+
+Cloudflare R2 may not as transparent as ***Pages***, by using this, import the GitHub Pages' repo first, than run this command. 
+
+```bash
+sed -i 's/github/gitlab/g' /etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo
+```
+</details>
+
+<details>
 <summary>If you wants Cloudflare...</summary>
 <br>
 GitHub is using Fastly CDN, which performs terrible on lots of countries, I also pushed the repo to Cloudflare R2, which has better speed.
@@ -108,6 +119,17 @@ curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/nightly-suse.repo | sud
 ```
 
 <details>
+<summary>GitLab Pages...</summary>
+<br>
+
+Cloudflare R2 may not as transparent as ***Pages***, by using this, import the GitHub Pages' repo first, than run this command. 
+
+```bash
+sed -i 's/github/gitlab/g' /etc/zypp/repos.d/xlion-rustdesk-rpm-suse-repo.repo
+```
+</details>
+
+<details>
 <summary>If you wants Cloudflare...</summary>
 <br>
 GitHub is using Fastly CDN, which performs terrible on lots of countries, I also pushed the repo to Cloudflare R2, which has better speed.
@@ -136,6 +158,10 @@ sudo zypper in rustdesk
 ### Versioning
 
 I use [fpm](https://github.com/jordansissel/fpm) to modify the nightly version with current date, so you'll never need to run `reinstall` in order to upgrade nightly.
+
+## Mirror
+
+This repo and Pages are mirrored to [GitLab](https://gitlab.com/xlionjuan/rustdesk-rpm-repo).
 
 ## License
 
