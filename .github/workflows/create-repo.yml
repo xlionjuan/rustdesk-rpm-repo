@@ -6,12 +6,12 @@ on:
     - cron: "0 3 * * *"
   pull_request:
     branches:
-      - main
+      - 'main'
     paths-ignore:
       - '**.md'
   push:
     branches:
-      - main
+      - 'main'
     paths-ignore:
       - '**.md'
   workflow_dispatch:
@@ -19,7 +19,6 @@ on:
 permissions:
     contents: read
     pages: write
-    id-token: write
   
 jobs:
     verify:
@@ -49,7 +48,7 @@ jobs:
           uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
     
         - name: Import GPG Key
-          if: github.event_name != 'pull_request' || github.actor == 'renovate[bot]'
+          if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
           run: |
             echo "$GPG_PRIVATE_KEY" | gpg --batch --yes --import
             GPG_PUBLIC_KEY=$(gpg --list-keys --with-colons | grep fpr | head -n1 | cut -d: -f10)
@@ -62,7 +61,7 @@ jobs:
         - name: Download RustDesk latest and nightly
           run: bash rustdesk_latest.sh & bash rustdesk_nightly.sh
 
-        - name: Reversion nightly version number with date
+        - name: Reversion nightly version number with date and recompress
           run: |
             bash rustdesk_nightly_reversion.sh wwwroot/nightly/ori IS_NIGHTLY &\
             bash rustdesk_nightly_reversion.sh wwwroot/nightly-suse/ori IS_NIGHTLY &\
@@ -72,14 +71,14 @@ jobs:
             tree
 
         - name: Sign RPMs
-          if: github.event_name != 'pull_request' || github.actor == 'renovate[bot]' || github.ref == 'refs/heads/main'
+          if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
           run: bash createrepo/1_sign_rpm.sh
 
         - name: Create repo
           run: bash createrepo/2_createrepo.sh
 
         - name: Sign repo
-          if: github.event_name != 'pull_request' || github.actor == 'renovate[bot]' || github.ref == 'refs/heads/main'
+          if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
           run: bash createrepo/3_sign_repo.sh
         
         - name: Sleep 0.5 sec
