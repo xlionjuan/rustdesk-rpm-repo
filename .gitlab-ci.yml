@@ -2,7 +2,7 @@ stages:
   - build
 
 pages:
-  image: "registry.fedoraproject.org/fedora:latest"
+  image: "quay.io/fedora/fedora:latest"
   stage: build
   variables:
     GIT_STRATEGY: none
