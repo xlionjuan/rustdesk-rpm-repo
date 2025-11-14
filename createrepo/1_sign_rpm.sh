@@ -13,7 +13,12 @@ echo "Validate..."
 
 set -ouex pipefail
 
-rpm -K wwwroot/latest/*.rpm | grep -q "signatures OK"
-rpm -K wwwroot/latest-suse/*.rpm | grep -q "signatures OK"
-rpm -K wwwroot/nightly/*.rpm | grep -q "signatures OK"
-rpm -K wwwroot/nightly-suse/*.rpm | grep -q "signatures OK"
+for f in wwwroot/{latest,latest-suse,nightly,nightly-suse}/*.rpm; do
+    echo "Checking: $f"
+    if rpm -K "$f" | grep -q "signatures OK"; then
+        echo "  ✔ OK: $f"
+    else
+        echo "  ❌ Signature invalid or missing: $f"
+        exit 1
+    fi
+done
