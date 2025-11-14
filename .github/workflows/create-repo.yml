@@ -53,6 +53,9 @@ jobs:
 
             echo "%_signature gpg
             %_gpg_name $GPG_PUBLIC_KEY" > ~/.rpmmacros
+            
+            gpg --export -a > rpmpubkey
+            rpmkeys --import rpmpubkey
           env:
             GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
