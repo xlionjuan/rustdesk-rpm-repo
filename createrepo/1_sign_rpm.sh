@@ -23,7 +23,7 @@ echo "Signing..."
 for d in "${RPM_DIRS[@]}"; do
   for f in "$d"/*.rpm; do
     echo "Signing: $f"
-    rpmkeys --addsign "$f"
+    rpmsign --addsign "$f"
   done
 done
 echo ""
