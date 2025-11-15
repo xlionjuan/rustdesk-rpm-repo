@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -oue pipefail
+set -euo pipefail
 
 # Folder list
 RPM_DIRS=(
