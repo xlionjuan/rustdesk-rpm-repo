@@ -17,5 +17,4 @@ for d in "${REPO_DIRS[@]}"; do
     gpg --detach-sign --armor "$xml" &
 done
 
-# 等全部簽名完成
 wait
