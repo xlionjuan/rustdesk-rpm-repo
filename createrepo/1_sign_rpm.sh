@@ -14,12 +14,16 @@ RPM_DIRS=(
 
 MAX_RETRY=3
 RETRY_SLEEP=2
-GPG_FINGERPRINT=$(gpg --list-keys --with-colons | grep fpr | head -n1 | cut -d: -f10 | tr 'A-Z' 'a-z')
+GPG_FINGERPRINT=$(gpg --list-keys --with-colons | grep fpr | head -n1 | cut -d: -f10)
 
 # Return 0 = success
 has_signature() {
-  rpmkeys -Kv "$1" | grep -q "$GPG_FINGERPRINT"
+  echo "== rpmkeys output for $1 ==" >&2
+  rpmkeys -Kv "$1" >&2
+  echo "== end ==" >&2
+  rpmkeys -Kv "$1" | grep -qi "$GPG_FINGERPRINT"
 }
+
 
 echo "Signing..."
 for d in "${RPM_DIRS[@]}"; do
