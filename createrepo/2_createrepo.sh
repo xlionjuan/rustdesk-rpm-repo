@@ -1,8 +1,20 @@
 #!/bin/bash
 
-set -oue pipefail
+set -euo pipefail
 
-createrepo_c wwwroot/latest & \
-createrepo_c wwwroot/latest-suse & \
-createrepo_c wwwroot/nightly & \
-createrepo_c wwwroot/nightly-suse
+export GPG_TTY=""
+
+REPO_DIRS=(
+  "wwwroot/latest"
+  "wwwroot/latest-suse"
+  "wwwroot/nightly"
+  "wwwroot/nightly-suse"
+)
+
+for d in "${REPO_DIRS[@]}"; do
+    echo "Running createrepo_c on: $d"
+    createrepo_c "$d" &
+done
+
+
+wait

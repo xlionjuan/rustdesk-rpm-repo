@@ -1,24 +1,73 @@
 #!/bin/bash
 
-set -oue pipefail
+set -euo pipefail
+
+export GPG_TTY=""
+
+# Folder list
+RPM_DIRS=(
+  "wwwroot/latest"
+  "wwwroot/latest-suse"
+  "wwwroot/nightly"
+  "wwwroot/nightly-suse"
+)
+
+MAX_RETRY=3
+RETRY_SLEEP=2
+GPG_FINGERPRINT=$(gpg --list-keys --with-colons | grep fpr | head -n1 | cut -d: -f10)
+
+# Return 0 = success
+has_signature() {
+  echo "== rpmkeys output for $1 ==" >&2
+  rpmkeys -Kv "$1" >&2
+  echo "== end ==" >&2
+  rpmkeys -Kv "$1" | grep -qi "$GPG_FINGERPRINT"
+}
+
 
 echo "Signing..."
-rpm --addsign wwwroot/latest/*.rpm
-rpm --addsign wwwroot/latest-suse/*.rpm
-rpm --addsign wwwroot/nightly/*.rpm
-rpm --addsign wwwroot/nightly-suse/*.rpm
+for d in "${RPM_DIRS[@]}"; do
+  for f in "$d"/*.rpm; do
+    echo "Signing: $f"
+    rpmsign --addsign "$f"
+  done
+done
 echo ""
 
 echo "Validate..."
 
-set -ouex pipefail
-
-for f in wwwroot/{latest,latest-suse,nightly,nightly-suse}/*.rpm; do
+for d in "${RPM_DIRS[@]}"; do
+  for f in "$d"/*.rpm; do
     echo "Checking: $f"
-    if rpm -K "$f" | grep -q "signatures OK"; then
-        echo "  ✔ OK: $f"
-    else
-        echo "  ❌ Signature invalid or missing: $f"
-        exit 1
+
+    if has_signature "$f"; then
+      echo "  ✔ OK: $f"
+      continue
     fi
+
+    echo "  ⚠ Signature missing or invalid, start retry: $f"
+
+    attempt=1
+    while (( attempt <= MAX_RETRY )); do
+      echo "  → Retry $attempt/$MAX_RETRY: $f"
+      # Ignore exit code for rpmsign
+      if ! rpmsign --addsign "$f"; then
+        echo "    (rpmsign --addsign returned non-zero, ignore and re-check)"
+      fi
+
+      if has_signature "$f"; then
+        echo "  ✔ OK after retry: $f"
+        break
+      fi
+
+      (( attempt++ ))
+      sleep "$RETRY_SLEEP"
+    done
+
+    # Failed completely when still not success
+    if ! has_signature "$f"; then
+      echo "  ❌ Signature invalid or missing after ${MAX_RETRY} retries: $f"
+      exit 1
+    fi
+  done
 done

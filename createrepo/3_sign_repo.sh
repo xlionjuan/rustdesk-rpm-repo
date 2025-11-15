@@ -1,8 +1,20 @@
 #!/bin/bash
 
-set -oue pipefail
+set -euo pipefail
 
-gpg --detach-sign --armor wwwroot/latest/repodata/repomd.xml & \
-gpg --detach-sign --armor wwwroot/latest-suse/repodata/repomd.xml & \
-gpg --detach-sign --armor wwwroot/nightly/repodata/repomd.xml & \
-gpg --detach-sign --armor wwwroot/nightly-suse/repodata/repomd.xml
+export GPG_TTY=""
+
+REPO_DIRS=(
+  "wwwroot/latest"
+  "wwwroot/latest-suse"
+  "wwwroot/nightly"
+  "wwwroot/nightly-suse"
+)
+
+for d in "${REPO_DIRS[@]}"; do
+    xml="$d/repodata/repomd.xml"
+    echo "Signing metadata: $xml"
+    gpg --detach-sign --armor "$xml" &
+done
+
+wait
