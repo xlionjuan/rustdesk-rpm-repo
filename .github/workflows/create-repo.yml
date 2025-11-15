@@ -46,7 +46,7 @@ jobs:
             persist-credentials: false
     
         - name: Import GPG Key
-        #if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
+          if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
           run: |
             echo "$GPG_PRIVATE_KEY" | gpg --batch --yes --import
             GPG_PUBLIC_KEY=$(gpg --list-keys --with-colons | grep fpr | head -n1 | cut -d: -f10)
@@ -72,7 +72,7 @@ jobs:
             tree
 
         - name: Sign RPMs
-          #if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
+          if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
           run: bash createrepo/1_sign_rpm.sh
 
         - name: Create repo
