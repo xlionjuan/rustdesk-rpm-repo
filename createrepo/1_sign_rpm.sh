@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+export GPG_TTY=""
+
 # Folder list
 RPM_DIRS=(
   "wwwroot/latest"

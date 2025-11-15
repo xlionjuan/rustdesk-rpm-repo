@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+export GPG_TTY=""
+
 REPO_DIRS=(
   "wwwroot/latest"
   "wwwroot/latest-suse"
