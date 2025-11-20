@@ -62,6 +62,9 @@ jobs:
         - name: Download RustDesk latest and nightly
           run: bash rustdesk_latest.sh & bash rustdesk_nightly.sh
 
+        - name: sleep 1
+          run: sleep 1
+
         - name: Reversion nightly version number with date and recompress
           run: |
             bash rustdesk_nightly_reversion.sh wwwroot/nightly/ori IS_NIGHTLY &\
@@ -71,12 +74,21 @@ jobs:
             echo "Run tree"
             tree
 
+        - name: sleep 1
+          run: sleep 1
+
         - name: Sign RPMs
           if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
           run: bash createrepo/1_sign_rpm.sh
 
+        - name: sleep 1
+          run: sleep 1
+
         - name: Create repo
           run: bash createrepo/2_createrepo.sh
+
+        - name: sleep 0.5
+          run: sleep 0.5
 
         - name: Sign repo
           if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
