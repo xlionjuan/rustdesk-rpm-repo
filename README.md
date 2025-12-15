@@ -36,13 +36,13 @@ This is all in one repo, so it will update all every 3 AM UTC, because RustDesk'
 ### latest
 
 ```bash
-curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/latest.repo | sudo tee /etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo
+curl -fsSL https://xlionjuan.github.io/rustdesk-rpm-repo/latest.repo | sudo tee /etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo
 ```
 
 ### nightly
 
 ```bash
-curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/nightly.repo | sudo tee /etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo
+curl -fsSL https://xlionjuan.github.io/rustdesk-rpm-repo/nightly.repo | sudo tee /etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo
 ```
 
 If you wanna switch channel, edit `/etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo`, edit the `baseurl`.
@@ -92,13 +92,13 @@ This repo provides two architectures
 ### latest
 
 ```bash
-curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/latest-suse.repo | sudo tee /etc/zypp/repos.d/xlion-rustdesk-rpm-suse-repo.repo
+curl -fsSL https://xlionjuan.github.io/rustdesk-rpm-repo/latest-suse.repo | sudo tee /etc/zypp/repos.d/xlion-rustdesk-rpm-suse-repo.repo
 ```
 
 ### nightly
 
 ```bash
-curl -fsSl https://xlionjuan.github.io/rustdesk-rpm-repo/nightly-suse.repo | sudo tee /etc/zypp/repos.d/xlion-rustdesk-rpm-suse-repo.repo
+curl -fsSL https://xlionjuan.github.io/rustdesk-rpm-repo/nightly-suse.repo | sudo tee /etc/zypp/repos.d/xlion-rustdesk-rpm-suse-repo.repo
 ```
 
 <details>
