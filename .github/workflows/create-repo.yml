@@ -44,20 +44,6 @@ jobs:
           uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
           with:
             persist-credentials: false
-    
-        - name: Import GPG Key
-          if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
-          run: |
-            echo "$GPG_PRIVATE_KEY" | gpg --batch --yes --import
-            GPG_PUBLIC_KEY=$(gpg --list-keys --with-colons | grep fpr | head -n1 | cut -d: -f10)
-
-            echo "%_signature gpg
-            %_gpg_name $GPG_PUBLIC_KEY" > ~/.rpmmacros
-            
-            gpg --export -a > rpmpubkey
-            rpmkeys --import rpmpubkey
-          env:
-            GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
         - name: Download RustDesk latest and nightly
           run: bash rustdesk_latest.sh & bash rustdesk_nightly.sh
@@ -76,6 +62,39 @@ jobs:
 
         - name: sleep 1
           run: sleep 1
+
+        - name: Prepare ephemeral GPG home + rpm macros
+          if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
+          shell: bash
+          run: |
+            set -euo pipefail
+            umask 077
+            echo "GNUPGHOME=$(mktemp -d)" >> "$GITHUB_ENV"
+            echo "RPMMACROS=$(mktemp)" >> "$GITHUB_ENV"
+
+        - name: Import GPG Key
+          if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
+          shell: bash
+          run: |
+            set -euo pipefail
+            umask 077
+
+            IMPORT_FPR="$(
+              printf '%s' "$GPG_PRIVATE_KEY" |
+              gpg --batch --yes --status-fd=1 --import 2>/dev/null |
+              sed 's/\[GNUPG:\]/\n[GNUPG:]/g' |
+              awk '/^\[GNUPG:\] IMPORT_OK/ {print $4; exit}'
+            )"
+            test -n "$IMPORT_FPR"
+
+            cat > "$RPMMACROS" <<EOF
+            %_signature gpg
+            %_gpg_name $IMPORT_FPR
+            EOF
+
+            rpmkeys --import <(gpg --batch --armor --export "$IMPORT_FPR")
+          env:
+            GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
         - name: Sign RPMs
           if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
@@ -97,8 +116,10 @@ jobs:
         - name: Sleep 0.5 sec
           run: sleep 0.5
 
-        - name: Clean up GPG Key
-          run: rm -rf ~/.gnupg
+        - name: Clean up
+          run: |
+            rm -rf "$GNUPGHOME" || true
+            rm -rf "$RPMMACROS" || true
 
         - name: Upload Pages artifact
           uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
