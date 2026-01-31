@@ -88,11 +88,11 @@ jobs:
             )"
             test -n "$IMPORT_FPR"
 
-            cat > "$RPMMACROS" <<EOF
-            %_signature gpg
-            %_gpg_name $IMPORT_FPR
-            %_openpgp_sign_id $IMPORT_FPR
-            %_openpgp_sign gpg
+            cat > "$RPMMACROS" <<-EOF
+              %_signature gpg
+              %_gpg_name $IMPORT_FPR
+              %_openpgp_sign_id $IMPORT_FPR
+              %_openpgp_sign gpg
             EOF
             
             echo "GPG_FINGERPRINT=$IMPORT_FPR" >> "$GITHUB_ENV"
