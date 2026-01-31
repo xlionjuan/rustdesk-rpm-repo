@@ -106,6 +106,7 @@ jobs:
               '  "wwwroot/nightly-suse"' \
               ']' \
               'JSON' >> "$GITHUB_ENV"
+
         - name: Sign RPMs
           if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
           shell: bash
@@ -176,19 +177,31 @@ jobs:
               done
             done
 
-
         - name: sleep 1
           run: sleep 1
 
         - name: Create repo
-          run: bash createrepo/2_createrepo.sh
+          shell: bash
+          run: |
+            for d in "${REPO_DIRS[@]}"; do
+                echo "Running createrepo_c on: $d"
+                createrepo_c "$d" &
+            done
+            wait
 
         - name: sleep 0.5
           run: sleep 0.5
 
         - name: Sign repo
           if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
-          run: bash createrepo/3_sign_repo.sh
+          shell: bash
+          run: |
+            for d in "${REPO_DIRS[@]}"; do
+                xml="$d/repodata/repomd.xml"
+                echo "Signing metadata: $xml"
+                gpg --detach-sign --armor "$xml" &
+            done
+            wait
         
         - name: Sleep 0.5 sec
           run: sleep 0.5
