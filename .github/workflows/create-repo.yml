@@ -94,6 +94,18 @@ jobs:
           env:
             GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
+        - name: Define the lists of folder
+          shell: bash
+          run: |
+            printf '%s\n' \
+              'REPO_DIRS_JSON<<JSON' \
+              '[' \
+              '  "wwwroot/latest",' \
+              '  "wwwroot/latest-suse",' \
+              '  "wwwroot/nightly",' \
+              '  "wwwroot/nightly-suse"' \
+              ']' \
+              'JSON' >> "$GITHUB_ENV"
         - name: Sign RPMs
           if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
           shell: bash
@@ -103,12 +115,7 @@ jobs:
             set -euo pipefail
 
             # Folder list
-            RPM_DIRS=(
-              "wwwroot/latest"
-              "wwwroot/latest-suse"
-              "wwwroot/nightly"
-              "wwwroot/nightly-suse"
-            )
+            mapfile -t REPO_DIRS < <(jq -r '.[]' <<< "$REPO_DIRS_JSON")
 
             MAX_RETRY=3
             RETRY_SLEEP=2
@@ -123,7 +130,7 @@ jobs:
 
 
             echo "Signing..."
-            for d in "${RPM_DIRS[@]}"; do
+            for d in "${REPO_DIRS[@]}"; do
               for f in "$d"/*.rpm; do
                 echo "Signing: $f"
                 rpmsign --key-id "$GPG_FINGERPRINT" --addsign "$f"
@@ -133,7 +140,7 @@ jobs:
 
             echo "Validate..."
 
-            for d in "${RPM_DIRS[@]}"; do
+            for d in "${REPO_DIRS[@]}"; do
               for f in "$d"/*.rpm; do
                 echo "Checking: $f"
 
