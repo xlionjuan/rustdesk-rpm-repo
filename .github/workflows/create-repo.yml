@@ -183,6 +183,9 @@ jobs:
         - name: Create repo
           shell: bash
           run: |
+            # Folder list
+            mapfile -t REPO_DIRS < <(jq -r '.[]' <<< "$REPO_DIRS_JSON")
+
             for d in "${REPO_DIRS[@]}"; do
                 echo "Running createrepo_c on: $d"
                 createrepo_c "$d" &
@@ -196,6 +199,9 @@ jobs:
           if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
           shell: bash
           run: |
+            # Folder list
+            mapfile -t REPO_DIRS < <(jq -r '.[]' <<< "$REPO_DIRS_JSON")
+
             for d in "${REPO_DIRS[@]}"; do
                 xml="$d/repodata/repomd.xml"
                 echo "Signing metadata: $xml"
