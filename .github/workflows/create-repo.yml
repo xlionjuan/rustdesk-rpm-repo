@@ -87,33 +87,10 @@ jobs:
               awk '/^\[GNUPG:\] IMPORT_OK/ {print $4; exit}'
             )"
             test -n "$IMPORT_FPR"
-
-            cat > "$RPMMACROS" <<-EOF
-              %_signature gpg
-              %_gpg_name $IMPORT_FPR
-              %_openpgp_sign_id $IMPORT_FPR
-              %_openpgp_sign gpg
-            EOF
             
             echo "GPG_FINGERPRINT=$IMPORT_FPR" >> "$GITHUB_ENV"
 
             rpmkeys --import <(gpg --batch --armor --export "$IMPORT_FPR")
-
-            echo "=== RPMMACROS variable ==="
-            echo "RPMMACROS='$RPMMACROS'"
-
-            echo "=== Does the file exist? ==="
-            ls -l "$RPMMACROS" || true
-
-            echo "=== File content ==="
-            cat "$RPMMACROS" || true
-
-            echo "=== rpm eval openpgp_sign_id ==="
-            rpm --eval '%{?_openpgp_sign_id}' || true
-
-            echo "=== rpm eval gpg_name ==="
-            rpm --eval '%{?_gpg_name}' || true
-
           env:
             GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
@@ -149,7 +126,7 @@ jobs:
             for d in "${RPM_DIRS[@]}"; do
               for f in "$d"/*.rpm; do
                 echo "Signing: $f"
-                rpmsign --addsign "$f"
+                rpmsign --key-id "$GPG_FINGERPRINT" --addsign "$f"
               done
             done
             echo ""
