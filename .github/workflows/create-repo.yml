@@ -34,8 +34,8 @@ jobs:
             --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
             ghcr.io/xlionjuan/fedora-createrepo-image:latest  
    
-    build:
-      name: Build
+    prepare:
+      name: Prepare
       needs: verify
       runs-on: ubuntu-24.04-arm
       container: ghcr.io/xlionjuan/fedora-createrepo-image:latest
@@ -62,6 +62,26 @@ jobs:
 
         - name: sleep 1
           run: sleep 1
+
+        - name: Publish unsigned artifacts
+          uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+          with:
+            name: unsigned
+            path: wwwroot
+            if-no-files-found: error
+
+    sign:
+      name: Sign RPMs and repos
+      needs: prepare
+      runs-on: ubuntu-24.04-arm
+      container: ghcr.io/xlionjuan/fedora-createrepo-image:latest
+      steps:
+        - name: Download unsigned artifacts
+          uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+          with:
+            pattern: unsigned
+            path: wwwroot
+            merge-multiple: true
 
         - name: Prepare ephemeral GPG home + rpm macros
           if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
@@ -237,7 +257,7 @@ jobs:
         name: github-pages
         url: ${{ steps.deployment.outputs.page_url }}
       runs-on: ubuntu-24.04-arm
-      needs: build
+      needs: sign
       permissions:
         contents: read
         pages: write
@@ -251,7 +271,7 @@ jobs:
       name: Push to Cloudflare R2
       if: github.event_name != 'pull_request'
       runs-on: ubuntu-24.04-arm
-      needs: build
+      needs: sign
       steps:
         - name: Download artifact
           uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
