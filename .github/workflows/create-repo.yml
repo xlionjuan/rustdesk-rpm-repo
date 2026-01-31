@@ -119,7 +119,6 @@ jobs:
 
             MAX_RETRY=3
             RETRY_SLEEP=2
-            GPG_FINGERPRINT=$(gpg --list-keys --with-colons | grep fpr | head -n1 | cut -d: -f10)
 
             # Return 0 = success
             has_signature() {
