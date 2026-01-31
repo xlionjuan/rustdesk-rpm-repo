@@ -90,7 +90,10 @@ jobs:
             cat > "$RPMMACROS" <<EOF
             %_signature gpg
             %_gpg_name $IMPORT_FPR
+            %_openpgp_sign_id $IMPORT_FPR
+            %_openpgp_sign gpg
             EOF
+
 
             rpmkeys --import <(gpg --batch --armor --export "$IMPORT_FPR")
           env:
