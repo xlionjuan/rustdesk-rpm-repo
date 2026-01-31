@@ -71,6 +71,7 @@ jobs:
             umask 077
             echo "GNUPGHOME=$(mktemp -d)" >> "$GITHUB_ENV"
             echo "RPMMACROS=$(mktemp)" >> "$GITHUB_ENV"
+            echo "GPG_TTY=" >> "$GITHUB_ENV"
 
         - name: Import GPG Key
           if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
@@ -93,7 +94,8 @@ jobs:
             %_openpgp_sign_id $IMPORT_FPR
             %_openpgp_sign gpg
             EOF
-
+            
+            echo "GPG_FINGERPRINT=$IMPORT_FPR" >> "$GITHUB_ENV"
 
             rpmkeys --import <(gpg --batch --armor --export "$IMPORT_FPR")
           env:
@@ -101,7 +103,80 @@ jobs:
 
         - name: Sign RPMs
           if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
-          run: bash createrepo/1_sign_rpm.sh
+          shell: bash
+          run: |
+            #!/bin/bash
+
+            set -euo pipefail
+
+            # Folder list
+            RPM_DIRS=(
+              "wwwroot/latest"
+              "wwwroot/latest-suse"
+              "wwwroot/nightly"
+              "wwwroot/nightly-suse"
+            )
+
+            MAX_RETRY=3
+            RETRY_SLEEP=2
+            GPG_FINGERPRINT=$(gpg --list-keys --with-colons | grep fpr | head -n1 | cut -d: -f10)
+
+            # Return 0 = success
+            has_signature() {
+              echo "== rpmkeys output for $1 ==" >&2
+              rpmkeys -Kv "$1" >&2
+              echo "== end ==" >&2
+              rpmkeys -Kv "$1" | grep -qi "$GPG_FINGERPRINT"
+            }
+
+
+            echo "Signing..."
+            for d in "${RPM_DIRS[@]}"; do
+              for f in "$d"/*.rpm; do
+                echo "Signing: $f"
+                rpmsign --addsign "$f"
+              done
+            done
+            echo ""
+
+            echo "Validate..."
+
+            for d in "${RPM_DIRS[@]}"; do
+              for f in "$d"/*.rpm; do
+                echo "Checking: $f"
+
+                if has_signature "$f"; then
+                  echo "  ✔ OK: $f"
+                  continue
+                fi
+
+                echo "  ⚠ Signature missing or invalid, start retry: $f"
+
+                attempt=1
+                while (( attempt <= MAX_RETRY )); do
+                  echo "  → Retry $attempt/$MAX_RETRY: $f"
+                  # Ignore exit code for rpmsign
+                  if ! rpmsign --addsign "$f"; then
+                    echo "    (rpmsign --addsign returned non-zero, ignore and re-check)"
+                  fi
+
+                  if has_signature "$f"; then
+                    echo "  ✔ OK after retry: $f"
+                    break
+                  fi
+
+                  (( attempt++ ))
+                  sleep "$RETRY_SLEEP"
+                done
+
+                # Failed completely when still not success
+                if ! has_signature "$f"; then
+                  echo "  ❌ Signature invalid or missing after ${MAX_RETRY} retries: $f"
+                  exit 1
+                fi
+              done
+            done
+
 
         - name: sleep 1
           run: sleep 1
