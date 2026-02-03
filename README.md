@@ -66,7 +66,11 @@ The fingerprint is:
 1521 F219 00DB 3201 95AF A358 2BE8 3361 1FF6 0389
 ```
 
-Please ignore the name, I shared the same key with APT repo.
+Pending rotated key: 
+
+```
+3E32 B16A 4821 C54B 53A2 58F2 8EBA 83B8 784E 3812
+```
 
 ## Install/Upgrade RustDesk
 
