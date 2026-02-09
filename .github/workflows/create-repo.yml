@@ -75,6 +75,7 @@ jobs:
       needs: prepare
       runs-on: ubuntu-24.04-arm
       container: ghcr.io/xlionjuan/fedora-createrepo-image:latest
+      if: github.event_name != 'pull_request_target' || github.event.pull_request.head.repo.full_name == github.repository
       steps:
         - name: Download unsigned artifacts
           uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
@@ -84,7 +85,6 @@ jobs:
             merge-multiple: true
 
         - name: Prepare ephemeral GPG home + rpm macros
-          if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
           shell: bash
           run: |
             set -euo pipefail
@@ -94,7 +94,6 @@ jobs:
             echo "GPG_TTY=" >> "$GITHUB_ENV"
 
         - name: Import GPG Key
-          if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
           shell: bash
           run: |
             set -euo pipefail
@@ -128,7 +127,6 @@ jobs:
               'JSON' >> "$GITHUB_ENV"
 
         - name: Sign RPMs
-          if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
           shell: bash
           run: |
             #!/bin/bash
@@ -216,7 +214,6 @@ jobs:
           run: sleep 0.5
 
         - name: Sign repo
-          if: github.event_name != 'pull_request' || startsWith(github.head_ref, 'renovate/')
           shell: bash
           run: |
             # Folder list
@@ -233,6 +230,7 @@ jobs:
           run: sleep 0.5
 
         - name: Clean up
+          if: always()
           run: |
             rm -rf "$GNUPGHOME" || true
             rm -rf "$RPMMACROS" || true
