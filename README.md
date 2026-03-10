@@ -13,9 +13,9 @@
 > [!NOTE]  
 > Cloudflare R2 source is deprecated, but it will still be available for some time.
 
-This repo will use [xlionjuan/fedora-createrepo-image](https://github.com/xlionjuan/fedora-createrepo-image) and some [simple scripts](https://github.com/xlionjuan/rustdesk-rpm-repo/tree/main/createrepo) to create repo, and deploy to GitHub Pages and Cloudflare R2.
+This repo will use [xlionjuan/fedora-createrepo-image](https://github.com/xlionjuan/fedora-createrepo-image) and [xlion-repo-utils-gh](https://github.com/xlionjuan/fedora-createrepo-image/tree/main/scripts) to create repo, and deploy to GitHub Pages and Cloudflare R2.
 
-The `rustdesk*.sh` script is written by ChatGPT, it will fetch the release data from GitHub API and use [jq](https://github.com/jqlang/jq) to parse JSON data and find the asset URL.
+The download and verification logic is handled by [xlion-repo-utils-gh](https://github.com/xlionjuan/fedora-createrepo/tree/main/scripts), which fetches release data, downloads packages, and verifies SHA256 checksums.
 
 ## Architectures
 
