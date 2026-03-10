@@ -13,9 +13,9 @@
 > [!NOTE]  
 > Cloudflare R2 source is deprecated, but it will still be available for some time.
 
-This repo will use [xlionjuan/fedora-createrepo-image](https://github.com/xlionjuan/fedora-createrepo-image) and [xlion-repo-utils-gh](https://github.com/xlionjuan/fedora-createrepo-image/tree/main/scripts) to create repo, and deploy to GitHub Pages and Cloudflare R2.
+This repo will use [xlionjuan/fedora-createrepo-image](https://github.com/xlionjuan/fedora-createrepo-image) and [createrepo_c](https://github.com/rpm-software-management/createrepo_c) to create repo, and deploy to GitHub Pages and Cloudflare R2.
 
-The download and verification logic is handled by [xlion-repo-utils-gh](https://github.com/xlionjuan/fedora-createrepo/tree/main/scripts), which fetches release data, downloads packages, and verifies SHA256 checksums.
+The download and verification logic is handled by [xlion-repo-utils-gh](https://github.com/xlionjuan/fedora-createrepo-image/blob/main/scripts/xlion-repo-utils-gh), which fetches release data, downloads packages, and verifies SHA256 checksums.
 
 ## Architectures
 
