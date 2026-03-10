@@ -96,6 +96,18 @@ jobs:
             # Remove SUSE from non-SUSE folder
             rm -f wwwroot/nightly/ori/*-suse*.rpm 2>/dev/null || true
 
+        - name: sleep 1
+          run: sleep 1
+
+        - name: Reversion nightly version number with date and recompress
+          run: |
+            bash rustdesk_nightly_reversion.sh wwwroot/nightly/ori IS_NIGHTLY &\
+            bash rustdesk_nightly_reversion.sh wwwroot/nightly-suse/ori IS_NIGHTLY &\
+            bash rustdesk_nightly_reversion.sh wwwroot/latest/ori "" &\
+            bash rustdesk_nightly_reversion.sh wwwroot/latest-suse/ori ""
+            echo "Run tree"
+            tree
+
         - name: Output download summary
           run: |
             echo "## Download Summary" >> "$GITHUB_STEP_SUMMARY"
@@ -111,18 +123,6 @@ jobs:
             echo "" >> "$GITHUB_STEP_SUMMARY"
             echo "### Nightly (SUSE)" >> "$GITHUB_STEP_SUMMARY"
             ls -la wwwroot/nightly-suse/ori/ >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "No files" >> "$GITHUB_STEP_SUMMARY"
-
-        - name: sleep 1
-          run: sleep 1
-
-        - name: Reversion nightly version number with date and recompress
-          run: |
-            bash rustdesk_nightly_reversion.sh wwwroot/nightly/ori IS_NIGHTLY &\
-            bash rustdesk_nightly_reversion.sh wwwroot/nightly-suse/ori IS_NIGHTLY &\
-            bash rustdesk_nightly_reversion.sh wwwroot/latest/ori "" &\
-            bash rustdesk_nightly_reversion.sh wwwroot/latest-suse/ori ""
-            echo "Run tree"
-            tree
 
         - name: sleep 1
           run: sleep 1
