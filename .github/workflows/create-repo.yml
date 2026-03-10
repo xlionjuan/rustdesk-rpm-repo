@@ -111,18 +111,9 @@ jobs:
         - name: Output download summary
           run: |
             echo "## Download Summary" >> "$GITHUB_STEP_SUMMARY"
-            echo "" >> "$GITHUB_STEP_SUMMARY"
-            echo "### Latest (non-SUSE)" >> "$GITHUB_STEP_SUMMARY"
-            ls -la wwwroot/latest/ori/ >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "No files" >> "$GITHUB_STEP_SUMMARY"
-            echo "" >> "$GITHUB_STEP_SUMMARY"
-            echo "### Latest (SUSE)" >> "$GITHUB_STEP_SUMMARY"
-            ls -la wwwroot/latest-suse/ori/ >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "No files" >> "$GITHUB_STEP_SUMMARY"
-            echo "" >> "$GITHUB_STEP_SUMMARY"
-            echo "### Nightly (non-SUSE)" >> "$GITHUB_STEP_SUMMARY"
-            ls -la wwwroot/nightly/ori/ >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "No files" >> "$GITHUB_STEP_SUMMARY"
-            echo "" >> "$GITHUB_STEP_SUMMARY"
-            echo "### Nightly (SUSE)" >> "$GITHUB_STEP_SUMMARY"
-            ls -la wwwroot/nightly-suse/ori/ >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "No files" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            tree wwwroot >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
 
         - name: sleep 1
           run: sleep 1
