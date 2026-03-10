@@ -108,7 +108,7 @@ jobs:
             echo "Run tree"
             tree
 
-        - name: Output download summary
+        - name: Output summary
           run: |
             echo "## Download Summary" >> "$GITHUB_STEP_SUMMARY"
             echo '```' >> "$GITHUB_STEP_SUMMARY"
