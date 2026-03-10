@@ -45,8 +45,56 @@ jobs:
           with:
             persist-credentials: false
 
-        - name: Download RustDesk latest and nightly
-          run: bash rustdesk_latest.sh & bash rustdesk_nightly.sh
+        - name: Define workfolders for RustDesk
+          run: |
+            echo "WORKFOLDER_LATEST=$(mktemp -p /tmp -d xlion-repo.XXXXX)" >> "$GITHUB_ENV"
+            echo "WORKFOLDER_NIGHTLY=$(mktemp -p /tmp -d xlion-repo.XXXXX)" >> "$GITHUB_ENV"
+
+        - name: Bootstrap repo info for RustDesk latest
+          env:
+            WORKFOLDER: ${{ env.WORKFOLDER_LATEST }}
+          run: |
+            xlion-repo-utils-gh --workfolder $WORKFOLDER --repo rustdesk/rustdesk
+
+        - name: Bootstrap repo info for RustDesk nightly
+          env:
+            WORKFOLDER: ${{ env.WORKFOLDER_NIGHTLY }}
+          run: |
+            xlion-repo-utils-gh --workfolder $WORKFOLDER --repo rustdesk/rustdesk --tag nightly
+
+        - name: Download RustDesk latest RPMs
+          env:
+            WORKFOLDER: ${{ env.WORKFOLDER_LATEST }}
+          run: |
+            cd $WORKFOLDER
+            cat dl_urls.txt | grep -E '\.rpm$' | wget2 --input-file=-
+            xlion-repo-utils-gh --verify --workfolder $WORKFOLDER
+
+        - name: Download RustDesk nightly RPMs
+          env:
+            WORKFOLDER: ${{ env.WORKFOLDER_NIGHTLY }}
+          run: |
+            cd $WORKFOLDER
+            cat dl_urls.txt | grep -E '\.rpm$' | wget2 --input-file=-
+            xlion-repo-utils-gh --verify --workfolder $WORKFOLDER
+
+        - name: Organize RustDesk packages to folders
+          env:
+            WORKFOLDER_LATEST: ${{ env.WORKFOLDER_LATEST }}
+            WORKFOLDER_NIGHTLY: ${{ env.WORKFOLDER_NIGHTLY }}
+          run: |
+            mkdir -p wwwroot/latest/ori wwwroot/latest-suse/ori
+            mkdir -p wwwroot/nightly/ori wwwroot/nightly-suse/ori
+            # Latest (non-SUSE)
+            cp $WORKFOLDER_LATEST/*-suse*.rpm wwwroot/latest-suse/ori/ 2>/dev/null || true
+            cp $WORKFOLDER_LATEST/*.rpm wwwroot/latest/ori/ 2>/dev/null || true
+            # Remove SUSE from non-SUSE folder
+            rm -f wwwroot/latest/ori/*-suse*.rpm 2>/dev/null || true
+            # Nightly (non-SUSE)
+            cp $WORKFOLDER_NIGHTLY/*-suse*.rpm wwwroot/nightly-suse/ori/ 2>/dev/null || true
+            cp $WORKFOLDER_NIGHTLY/*.rpm wwwroot/nightly/ori/ 2>/dev/null || true
+            # Remove SUSE from non-SUSE folder
+            rm -f wwwroot/nightly/ori/*-suse*.rpm 2>/dev/null || true
 
         - name: sleep 1
           run: sleep 1
@@ -59,6 +107,13 @@ jobs:
             bash rustdesk_nightly_reversion.sh wwwroot/latest-suse/ori ""
             echo "Run tree"
             tree
+
+        - name: Output summary
+          run: |
+            echo "## Download Summary" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            tree wwwroot >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
 
         - name: sleep 1
           run: sleep 1
@@ -235,6 +290,13 @@ jobs:
           run: |
             rm -rf "$GNUPGHOME" || true
             rm -rf "$RPMMACROS" || true
+
+        - name: Output final folder structure
+          run: |
+            echo "## Final Published Folder Structure" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            tree wwwroot >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
 
         - name: Upload Pages artifact
           uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
