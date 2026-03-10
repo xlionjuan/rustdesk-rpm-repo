@@ -45,8 +45,54 @@ jobs:
           with:
             persist-credentials: false
 
-        - name: Download RustDesk latest and nightly
-          run: bash rustdesk_latest.sh & bash rustdesk_nightly.sh
+        - name: Define workfolders for RustDesk
+          run: |
+            echo "WORKFOLDER_LATEST=$(mktemp -p /tmp -d xlion-repo.XXXXX)" >> "$GITHUB_ENV"
+            echo "WORKFOLDER_NIGHTLY=$(mktemp -p /tmp -d xlion-repo.XXXXX)" >> "$GITHUB_ENV"
+
+        - name: Bootstrap repo info for RustDesk latest
+          env:
+            WORKFOLDER: ${{ env.WORKFOLDER_LATEST }}
+          run: |
+            xlion-repo-utils-gh --workfolder $WORKFOLDER --repo rustdesk/rustdesk
+
+        - name: Bootstrap repo info for RustDesk nightly
+          env:
+            WORKFOLDER: ${{ env.WORKFOLDER_NIGHTLY }}
+          run: |
+            xlion-repo-utils-gh --workfolder $WORKFOLDER --repo rustdesk/rustdesk --tag nightly
+
+        - name: Download RustDesk latest RPMs
+          env:
+            WORKFOLDER: ${{ env.WORKFOLDER_LATEST }}
+          run: |
+            cd $WORKFOLDER
+            cat dl_urls.txt | grep -E '\.rpm$' | wget2 --input-file=-
+            xlion-repo-utils-gh --verify --workfolder $WORKFOLDER
+
+        - name: Download RustDesk nightly RPMs
+          env:
+            WORKFOLDER: ${{ env.WORKFOLDER_NIGHTLY }}
+          run: |
+            cd $WORKFOLDER
+            cat dl_urls.txt | grep -E '\.rpm$' | wget2 --input-file=-
+            xlion-repo-utils-gh --verify --workfolder $WORKFOLDER
+
+        - name: Organize RustDesk packages to folders
+          env:
+            WORKFOLDER_LATEST: ${{ env.WORKFOLDER_LATEST }}
+            WORKFOLDER_NIGHTLY: ${{ env.WORKFOLDER_NIGHTLY }}
+          run: |
+            mkdir -p wwwroot/latest/ori wwwroot/latest-suse/ori
+            mkdir -p wwwroot/nightly/ori wwwroot/nightly-suse/ori
+            # Latest (non-SUSE)
+            cp $WORKFOLDER_LATEST/*.rpm wwwroot/latest/ori/ 2>/dev/null || true
+            # Latest (SUSE)
+            cp $WORKFOLDER_LATEST/*.rpm wwwroot/latest-suse/ori/ 2>/dev/null || true
+            # Nightly (non-SUSE)
+            cp $WORKFOLDER_NIGHTLY/*.rpm wwwroot/nightly/ori/ 2>/dev/null || true
+            # Nightly (SUSE)
+            cp $WORKFOLDER_NIGHTLY/*.rpm wwwroot/nightly-suse/ori/ 2>/dev/null || true
 
         - name: sleep 1
           run: sleep 1
