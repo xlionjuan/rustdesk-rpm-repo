@@ -45,7 +45,7 @@ curl -fsSL https://xlionjuan.github.io/rustdesk-rpm-repo/latest.repo | sudo tee 
 curl -fsSL https://xlionjuan.github.io/rustdesk-rpm-repo/nightly.repo | sudo tee /etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo
 ```
 
-If you wanna switch channel, edit `/etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo`, edit the `baseurl`.
+If you want to switch channel, edit `/etc/yum.repos.d/xlion-rustdesk-rpm-repo.repo`, edit the `baseurl`.
 
 <details>
 <summary>GitLab Pages...</summary>
