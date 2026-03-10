@@ -77,7 +77,7 @@ Pending rotated key:
 ```bash
 sudo dnf install rustdesk
 ```
-Or `rpm-ostree install rustdesk` if you're using [Fedora Atomic](https://fedoraproject.org/atomic-desktops/) based systems.
+Or `rpm-ostree install rustdesk` if you're using systems based on [Fedora Atomic](https://fedoraproject.org/atomic-desktops/).
 
 ### Versioning
 
