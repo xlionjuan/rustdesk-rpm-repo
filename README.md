@@ -26,7 +26,7 @@ This repo provides two architectures
 
 ## Update frequency
 
-This is all in one repo, so it will update all every 3 AM UTC, because RustDesk's Nightly will build a little over 2 hours.
+This is all in one repo, so it updates every 3 AM UTC, because RustDesk's Nightly will build a little over 2 hours.
 
 ## Import RPM repo
 
