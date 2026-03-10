@@ -86,13 +86,15 @@ jobs:
             mkdir -p wwwroot/latest/ori wwwroot/latest-suse/ori
             mkdir -p wwwroot/nightly/ori wwwroot/nightly-suse/ori
             # Latest (non-SUSE)
+            cp $WORKFOLDER_LATEST/*-suse*.rpm wwwroot/latest-suse/ori/ 2>/dev/null || true
             cp $WORKFOLDER_LATEST/*.rpm wwwroot/latest/ori/ 2>/dev/null || true
-            # Latest (SUSE)
-            cp $WORKFOLDER_LATEST/*.rpm wwwroot/latest-suse/ori/ 2>/dev/null || true
+            # Remove SUSE from non-SUSE folder
+            rm -f wwwroot/latest/ori/*-suse*.rpm 2>/dev/null || true
             # Nightly (non-SUSE)
+            cp $WORKFOLDER_NIGHTLY/*-suse*.rpm wwwroot/nightly-suse/ori/ 2>/dev/null || true
             cp $WORKFOLDER_NIGHTLY/*.rpm wwwroot/nightly/ori/ 2>/dev/null || true
-            # Nightly (SUSE)
-            cp $WORKFOLDER_NIGHTLY/*.rpm wwwroot/nightly-suse/ori/ 2>/dev/null || true
+            # Remove SUSE from non-SUSE folder
+            rm -f wwwroot/nightly/ori/*-suse*.rpm 2>/dev/null || true
 
         - name: sleep 1
           run: sleep 1
