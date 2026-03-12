@@ -17,17 +17,17 @@ on:
   workflow_dispatch:
 
 permissions:
-    contents: read
+  contents: read
 
 defaults:
   run:
     shell: bash
-  
+
 jobs:
-    verify:
-      name: Verify container
-      runs-on: ubuntu-24.04-arm
-      steps:
+  verify:
+    name: Verify container
+    runs-on: ubuntu-24.04-arm
+    steps:
         - name: Install Cosign
           uses: sigstore/cosign-installer@ba7bc0a3fef59531c69a25acd34668d6d3fe6f22 # v4.1.0
 
@@ -37,14 +37,14 @@ jobs:
             cosign verify --rekor-url=https://rekor.sigstore.dev \
             --certificate-identity-regexp "https://github.com/xlionjuan/.*" \
             --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-            ghcr.io/xlionjuan/fedora-createrepo-image:latest  
-   
-    prepare:
-      name: Prepare
-      needs: verify
-      runs-on: ubuntu-24.04-arm
-      container: ghcr.io/xlionjuan/fedora-createrepo-image:latest
-      steps:
+            ghcr.io/xlionjuan/fedora-createrepo-image:latest
+
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-24.04-arm
+    needs: verify
+    container: ghcr.io/xlionjuan/fedora-createrepo-image:latest
+    steps:
         - name: Checkout code
           uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
           with:
@@ -107,7 +107,7 @@ jobs:
             # Remove SUSE from non-SUSE folder
             rm -f wwwroot/nightly/ori/*-suse*.rpm 2>/dev/null || true
 
-        - name: sleep 1
+        - name: Sleep 1s
           run: sleep 1
 
         - name: Reversion nightly version number with date and recompress
@@ -128,7 +128,7 @@ jobs:
             tree wwwroot >> "$GITHUB_STEP_SUMMARY"
             echo '```' >> "$GITHUB_STEP_SUMMARY"
 
-        - name: sleep 1
+        - name: Sleep 1s
           run: sleep 1
 
         - name: Publish unsigned artifacts
@@ -138,14 +138,13 @@ jobs:
             path: wwwroot
             if-no-files-found: error
 
-    sign:
-      name: Sign RPMs and repos
-      needs: prepare
-      runs-on: ubuntu-24.04-arm
-      container: ghcr.io/xlionjuan/fedora-createrepo-image:latest
-      if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-
-      steps:
+  sign:
+    name: Sign RPMs and repos
+    runs-on: ubuntu-24.04-arm
+    needs: prepare
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    container: ghcr.io/xlionjuan/fedora-createrepo-image:latest
+    steps:
         - name: Download unsigned artifacts
           uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
           with:
@@ -261,7 +260,7 @@ jobs:
               done
             done
 
-        - name: sleep 1
+        - name: Sleep 1s
           run: sleep 1
 
         - name: Create repo
@@ -276,7 +275,7 @@ jobs:
             done
             wait
 
-        - name: sleep 0.5
+        - name: Sleep 0.5s
           run: sleep 0.5
 
         - name: Sign repo
@@ -291,8 +290,8 @@ jobs:
                 gpg --detach-sign --armor "$xml" &
             done
             wait
-        
-        - name: Sleep 0.5 sec
+
+        - name: Sleep 0.5s
           run: sleep 0.5
 
         - name: Clean up
@@ -323,36 +322,36 @@ jobs:
             path: wwwroot
             if-no-files-found: error
 
-    deploy:
-      name: Deploy to GitHub Pages
-      if: github.event_name != 'pull_request'
-      environment:
-        name: github-pages
-        url: ${{ steps.deployment.outputs.page_url }}
-      runs-on: ubuntu-24.04-arm
-      needs: sign
-      permissions:
-        contents: read
-        pages: write
-        id-token: write # Pages need this too
-      steps:
+  deploy:
+    name: Deploy to GitHub Pages
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04-arm
+    needs: sign
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write # Pages need this too
+    steps:
         - name: Deploy to GitHub Pages
           id: deployment
           uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
 
-    push-to-cf-r2:
-      name: Push to Cloudflare R2
-      if: github.event_name != 'pull_request'
-      runs-on: ubuntu-24.04-arm
-      needs: sign
-      steps:
+  push-to-cf-r2:
+    name: Push to Cloudflare R2
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04-arm
+    needs: sign
+    steps:
         - name: Download artifact
           uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
           with:
             pattern: cf_r2
             path: wwwroot
             merge-multiple: true
-    
+
         - name: Upload to Cloudflare R2
           uses: ryand56/r2-upload-action@47013c9cf0012876409579ed17399005aa287b48 # v1.3.4
           with:
