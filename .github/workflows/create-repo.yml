@@ -154,7 +154,6 @@ jobs:
             merge-multiple: true
 
         - name: Prepare ephemeral GPG home + rpm macros
-          shell: bash
           run: |
             set -euo pipefail
             umask 077
@@ -163,7 +162,6 @@ jobs:
             echo "GPG_TTY=" >> "$GITHUB_ENV"
 
         - name: Import GPG Key
-          shell: bash
           run: |
             set -euo pipefail
             umask 077
@@ -183,7 +181,6 @@ jobs:
             GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
         - name: Define the lists of folder
-          shell: bash
           run: |
             set -euo pipefail
             printf '%s\n' \
@@ -197,7 +194,6 @@ jobs:
               'JSON' >> "$GITHUB_ENV"
 
         - name: Sign RPMs
-          shell: bash
           run: |
             #!/bin/bash
 
@@ -269,7 +265,6 @@ jobs:
           run: sleep 1
 
         - name: Create repo
-          shell: bash
           run: |
             set -euo pipefail
             # Folder list
@@ -285,7 +280,6 @@ jobs:
           run: sleep 0.5
 
         - name: Sign repo
-          shell: bash
           run: |
             set -euo pipefail
             # Folder list
