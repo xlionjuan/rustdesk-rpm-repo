@@ -33,6 +33,7 @@ jobs:
 
         - name: Verify
           run: |
+            set -euo pipefail
             cosign verify --rekor-url=https://rekor.sigstore.dev \
             --certificate-identity-regexp "https://github.com/xlionjuan/.*" \
             --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
@@ -51,6 +52,7 @@ jobs:
 
         - name: Define workfolders for RustDesk
           run: |
+            set -euo pipefail
             echo "WORKFOLDER_LATEST=$(mktemp -p /tmp -d xlion-repo.XXXXX)" >> "$GITHUB_ENV"
             echo "WORKFOLDER_NIGHTLY=$(mktemp -p /tmp -d xlion-repo.XXXXX)" >> "$GITHUB_ENV"
 
@@ -58,18 +60,21 @@ jobs:
           env:
             WORKFOLDER: ${{ env.WORKFOLDER_LATEST }}
           run: |
+            set -euo pipefail
             xlion-repo-utils-gh --workfolder $WORKFOLDER --repo rustdesk/rustdesk
 
         - name: Bootstrap repo info for RustDesk nightly
           env:
             WORKFOLDER: ${{ env.WORKFOLDER_NIGHTLY }}
           run: |
+            set -euo pipefail
             xlion-repo-utils-gh --workfolder $WORKFOLDER --repo rustdesk/rustdesk --tag nightly
 
         - name: Download RustDesk latest RPMs
           env:
             WORKFOLDER: ${{ env.WORKFOLDER_LATEST }}
           run: |
+            set -euo pipefail
             cd $WORKFOLDER
             cat dl_urls.txt | grep -E '\.rpm$' | wget2 --input-file=-
             xlion-repo-utils-gh --verify --workfolder $WORKFOLDER
@@ -78,6 +83,7 @@ jobs:
           env:
             WORKFOLDER: ${{ env.WORKFOLDER_NIGHTLY }}
           run: |
+            set -euo pipefail
             cd $WORKFOLDER
             cat dl_urls.txt | grep -E '\.rpm$' | wget2 --input-file=-
             xlion-repo-utils-gh --verify --workfolder $WORKFOLDER
@@ -87,6 +93,7 @@ jobs:
             WORKFOLDER_LATEST: ${{ env.WORKFOLDER_LATEST }}
             WORKFOLDER_NIGHTLY: ${{ env.WORKFOLDER_NIGHTLY }}
           run: |
+            set -euo pipefail
             mkdir -p wwwroot/latest/ori wwwroot/latest-suse/ori
             mkdir -p wwwroot/nightly/ori wwwroot/nightly-suse/ori
             # Latest (non-SUSE)
@@ -105,6 +112,7 @@ jobs:
 
         - name: Reversion nightly version number with date and recompress
           run: |
+            set -euo pipefail
             bash rustdesk_nightly_reversion.sh wwwroot/nightly/ori IS_NIGHTLY &\
             bash rustdesk_nightly_reversion.sh wwwroot/nightly-suse/ori IS_NIGHTLY &\
             bash rustdesk_nightly_reversion.sh wwwroot/latest/ori "" &\
@@ -114,6 +122,7 @@ jobs:
 
         - name: Output summary
           run: |
+            set -euo pipefail
             echo "## Download Summary" >> "$GITHUB_STEP_SUMMARY"
             echo '```' >> "$GITHUB_STEP_SUMMARY"
             tree wwwroot >> "$GITHUB_STEP_SUMMARY"
@@ -176,6 +185,7 @@ jobs:
         - name: Define the lists of folder
           shell: bash
           run: |
+            set -euo pipefail
             printf '%s\n' \
               'REPO_DIRS_JSON<<JSON' \
               '[' \
@@ -261,6 +271,7 @@ jobs:
         - name: Create repo
           shell: bash
           run: |
+            set -euo pipefail
             # Folder list
             mapfile -t REPO_DIRS < <(jq -r '.[]' <<< "$REPO_DIRS_JSON")
 
@@ -276,6 +287,7 @@ jobs:
         - name: Sign repo
           shell: bash
           run: |
+            set -euo pipefail
             # Folder list
             mapfile -t REPO_DIRS < <(jq -r '.[]' <<< "$REPO_DIRS_JSON")
 
@@ -292,11 +304,13 @@ jobs:
         - name: Clean up
           if: always()
           run: |
+            set -euo pipefail
             rm -rf "$GNUPGHOME" || true
             rm -rf "$RPMMACROS" || true
 
         - name: Output final folder structure
           run: |
+            set -euo pipefail
             echo "## Final Published Folder Structure" >> "$GITHUB_STEP_SUMMARY"
             echo '```' >> "$GITHUB_STEP_SUMMARY"
             tree wwwroot >> "$GITHUB_STEP_SUMMARY"
