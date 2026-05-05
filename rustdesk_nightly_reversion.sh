@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Deprecated: the workflow now uses xlion-repo-repackage-rpm from
+# ghcr.io/xlionjuan/fedora-createrepo-image. This file is kept for reference.
+
 set -oue pipefail
 
 SOURCE_DIR="$1" # Directory containing the original .rpm files

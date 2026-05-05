@@ -113,10 +113,14 @@ jobs:
         - name: Reversion nightly version number with date and recompress
           run: |
             set -euo pipefail
-            bash rustdesk_nightly_reversion.sh wwwroot/nightly/ori IS_NIGHTLY &\
-            bash rustdesk_nightly_reversion.sh wwwroot/nightly-suse/ori IS_NIGHTLY &\
-            bash rustdesk_nightly_reversion.sh wwwroot/latest/ori "" &\
-            bash rustdesk_nightly_reversion.sh wwwroot/latest-suse/ori ""
+            pids=()
+            xlion-repo-repackage-rpm --source-dir wwwroot/nightly/ori --date-version --remove-source-dir & pids+=("$!")
+            xlion-repo-repackage-rpm --source-dir wwwroot/nightly-suse/ori --date-version --remove-source-dir & pids+=("$!")
+            xlion-repo-repackage-rpm --source-dir wwwroot/latest/ori --remove-source-dir & pids+=("$!")
+            xlion-repo-repackage-rpm --source-dir wwwroot/latest-suse/ori --remove-source-dir & pids+=("$!")
+            for pid in "${pids[@]}"; do
+              wait "$pid"
+            done
             echo "Run tree"
             tree
 
