@@ -152,30 +152,21 @@ jobs:
             path: wwwroot
             merge-multiple: true
 
-        - name: Prepare ephemeral GPG home + rpm macros
+        - name: Prepare rpm macros
           run: |
             set -euo pipefail
             umask 077
-            echo "GNUPGHOME=$(mktemp -d)" >> "$GITHUB_ENV"
             echo "RPMMACROS=$(mktemp)" >> "$GITHUB_ENV"
-            echo "GPG_TTY=" >> "$GITHUB_ENV"
 
         - name: Import GPG Key
           run: |
             set -euo pipefail
-            umask 077
-
-            IMPORT_FPR="$(
-              printf '%s' "$GPG_PRIVATE_KEY" |
-              gpg --batch --yes --status-fd=1 --import 2>/dev/null |
-              sed 's/\[GNUPG:\]/\n[GNUPG:]/g' |
-              awk '/^\[GNUPG:\] IMPORT_OK/ {print $4; exit}'
-            )"
-            test -n "$IMPORT_FPR"
-            
-            echo "GPG_FINGERPRINT=$IMPORT_FPR" >> "$GITHUB_ENV"
-
-            rpmkeys --import <(gpg --batch --armor --export "$IMPORT_FPR")
+            xlion-repo-gpg-import \
+              --key-env GPG_PRIVATE_KEY \
+              --create-gnupghome \
+              --github-env \
+              --name GPG_FINGERPRINT \
+              --rpmkeys-import
           env:
             GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
