@@ -263,12 +263,11 @@ jobs:
             set -euo pipefail
             # Folder list
             mapfile -t REPO_DIRS < <(jq -r '.[]' <<< "$REPO_DIRS_JSON")
-
+            repo_args=()
             for d in "${REPO_DIRS[@]}"; do
-                echo "Running createrepo_c on: $d"
-                createrepo_c "$d" &
+              repo_args+=(--dir "$d")
             done
-            wait
+            xlion-repo-rpm-createrepo "${repo_args[@]}"
 
         - name: Sleep 0.5s
           run: sleep 0.5
@@ -278,13 +277,11 @@ jobs:
             set -euo pipefail
             # Folder list
             mapfile -t REPO_DIRS < <(jq -r '.[]' <<< "$REPO_DIRS_JSON")
-
+            repo_args=()
             for d in "${REPO_DIRS[@]}"; do
-                xml="$d/repodata/repomd.xml"
-                echo "Signing metadata: $xml"
-                gpg --detach-sign --armor "$xml" &
+              repo_args+=(--dir "$d")
             done
-            wait
+            xlion-repo-rpm-sign-repomd "${repo_args[@]}" --gpg-key "$GPG_FINGERPRINT"
 
         - name: Sleep 0.5s
           run: sleep 0.5
