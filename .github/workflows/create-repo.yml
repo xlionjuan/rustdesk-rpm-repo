@@ -26,7 +26,7 @@ defaults:
 jobs:
   verify:
     name: Verify container
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-26.04-arm
     outputs:
       digest: ${{ steps.get-digest.outputs.digest }}
     steps:
@@ -50,7 +50,7 @@ jobs:
 
   prepare:
     name: Prepare
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-26.04-arm
     needs: verify
     container: ghcr.io/xlionjuan/fedora-createrepo-image@${{ needs.verify.outputs.digest }}
     steps:
@@ -153,7 +153,7 @@ jobs:
 
   sign:
     name: Sign RPMs and repos
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-26.04-arm
     needs: [prepare, verify]
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     container: ghcr.io/xlionjuan/fedora-createrepo-image@${{ needs.verify.outputs.digest }}
@@ -269,7 +269,7 @@ jobs:
   deploy:
     name: Deploy to GitHub Pages
     if: github.event_name != 'pull_request'
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-26.04-arm
     needs: sign
     environment:
       name: github-pages
@@ -286,7 +286,7 @@ jobs:
   push-to-cf-r2:
     name: Push to Cloudflare R2
     if: github.event_name != 'pull_request'
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-26.04-arm
     needs: sign
     steps:
         - name: Download artifact
