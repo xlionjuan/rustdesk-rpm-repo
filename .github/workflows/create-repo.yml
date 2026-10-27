@@ -234,8 +234,15 @@ jobs:
           if: always()
           run: |
             set -euo pipefail
-            rm -rf "$GNUPGHOME" || true
-            rm -rf "$RPMMACROS" || true
+            if [[ -n "${GNUPGHOME:-}" ]]; then
+              rm -rf "$GNUPGHOME" || true
+            fi
+            if [[ -n "${SEQUOIA_HOME:-}" ]]; then
+              rm -rf "$SEQUOIA_HOME" || true
+            fi
+            if [[ -n "${RPMMACROS:-}" ]]; then
+              rm -rf "$RPMMACROS" || true
+            fi
 
         - name: Output final folder structure
           run: |
